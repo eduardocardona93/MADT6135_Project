@@ -4,9 +4,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Log in</title>
 </head>
 <body>
-    
+    <form action="logged.html" method="GET">
+        <div>
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" required placeholder="Username">
+        </div>
+        <div>
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" required>
+        </div>
+        <div>
+            <label>
+                Password
+                <input type="password" name="password" required>
+            </label>
+        </div>
+        <button type="reset">Clear</button>
+        <button type="submit">Submit</button>
+    </form>
 </body>
 </html>
