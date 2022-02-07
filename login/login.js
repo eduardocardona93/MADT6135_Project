@@ -40,6 +40,10 @@ document.addEventListener("DOMContentLoaded", () => {
         setFormMessage(loginForm, "error", "Invalid username or password");
     });
 
+    createAccountForm.addEventListener("submit", e => {
+        
+    })
+
     document.querySelectorAll(".form__input").forEach(inputElement => {
         inputElement.addEventListener("blur", e => {
             if (e.target.id === "signupUsername" && e.target.value.lenght > 0 && e.target.value.lenght < 10){
