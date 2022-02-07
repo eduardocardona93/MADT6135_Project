@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     createAccountForm.addEventListener("submit", e => {
-        
+        e.preventDefault();
     })
 
     document.querySelectorAll(".form__input").forEach(inputElement => {
