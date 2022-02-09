@@ -6,9 +6,14 @@
     flex-direction: row;
     flex: 1 0 auto ;
     justify-content: space-between;
+    font: 500 1rem 'Quicksand', sans-serif;
   }
   
   /* Style the links inside the navigation bar */
+
+  .projectContainer {
+    font: 500 1rem 'Quicksand', sans-serif;
+  }
 
   .topnav .actions{
 
@@ -56,6 +61,6 @@
   }
 
   .topnav .home-title:hover,.menu-actions:hover{
-    background-color: #ddd;
+    background-color: #005780;
     border-radius: 5%;
   }
