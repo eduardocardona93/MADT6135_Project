@@ -1,0 +1,107 @@
+  body{
+      margin: 0;
+  }
+
+  .topnav {
+    background-color: #2696ff;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    flex: 1 0 auto ;
+    justify-content: space-between;
+  }
+  
+  /* Style the links inside the navigation bar */
+
+  .topnav .actions{
+
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    margin: 10px;
+  }
+  .topnav .btn-action{
+    background-color: transparent;
+    border: transparent;
+    border-radius: 50%;
+    margin: 0 10px;
+    padding: 20px ;
+    color: aliceblue;
+    cursor: pointer;
+  }
+  .topnav .btn-action:hover{
+    background-color: #ddd;
+    color: gray
+  }
+
+  .topnav .home-title {
+    float: left;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    margin-right: 30px;
+  }
+
+  .topnav .menu-actions {
+    margin: 0 10px;
+    text-align: center;
+    
+    padding: 20px ;
+    text-decoration: none;
+    color: rgb(41, 40, 40)
+  }
+
+  .topnav .home-title:hover,.menu-actions:hover{
+    background-color: #ddd;
+    border-radius: 5%;
+  }
+
+  .projectContainer{
+    padding-left:16px;
+  }
+
+  .listContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 1em 0;
+    padding: 20px;
+    height: 100%;
+  }  
+.projectList{
+    width: 100%;
+    height: 100%;
+
+    padding-left: 0;
+}
+
+.projectItem {
+    list-style: none;
+    display: inline-block;
+    width: calc(100% / 5);
+   
+    text-align: justify;
+    margin: 10px 5px;
+    padding: 10px;
+    padding-top: 20px;
+}
+.projectItem .title{
+  padding-bottom: 50px;
+  font-size: 25px;
+}
+
+.projectItem.onProgress{
+  background-color: gray;
+}
+.projectItem.success{
+  background-color: #00bb64;
+}
+
+.itemContent{
+  margin-top: 10px;
+  background-color: white;
+  padding: 10px 5px;
+}
