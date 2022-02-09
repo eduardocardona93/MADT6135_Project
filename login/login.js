@@ -42,6 +42,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     createAccountForm.addEventListener("submit", e => {
         e.preventDefault();
+
+        var user = {
+            id: users.lenght + 1,
+            name: document.getElementById("signupUsername").value,
+            email: document.getElementById("signupEmail").value,
+            password: document.getElementById("signupPassword").value,
+            rate: document.getElementById("signupHourlyRate").value
+        };
+        
+        addUserFun(user);
+        
     })
 
     document.querySelectorAll(".form__input").forEach(inputElement => {
