@@ -15,5 +15,8 @@ function insertNavBar(){
             <button class="btn-action" id="logOutBtn" title="Log out"><i class="fa-solid fa-right-from-bracket fa-lg"></i></button>
         </div>
     `
+
+
+    
     document.body.insertBefore(div, document.body.firstChild);
 }
