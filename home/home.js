@@ -1,6 +1,6 @@
 (function() {
     'use strict'
-
+    insertNavBar();
     // REPLACE THIS FOR THE PROJECT LOGIC
     let projects = [
         {id:1, title:"Project 1", leaderName: 'Keval Langalia',  members: [1,2,3,4] ,progress: 'onProgress'},
