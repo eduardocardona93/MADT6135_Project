@@ -1,6 +1,6 @@
 (function() {
     'use strict'
-    insertNavBar();
+    // insertNavBar();
 
     // REPLACE THIS FOR THE PROJECT LOGIC
     let projects = [
