@@ -3,7 +3,7 @@ function insertNavBar(){
     div.classList.add("topnav");
     div.innerHTML = `
         <div class="actions">
-            <a class="home-title"  href="#">Home</a>
+            <a class="home-title"  href="#">PJ Manager Pro</a>
             <button class="menu-actions" title="Check current progress"  ><i class="fa fa-list-check fa-lg"></i></i></button>
             <button class="menu-actions"  title="Create new project" ><i class="fa fa-folder-plus fa-xl"></i></button>
             <button class="menu-actions"  title="Check current users" ><i class="fa fa-users fa-xl"></i></button>
