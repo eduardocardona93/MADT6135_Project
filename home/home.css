@@ -1,5 +1,5 @@
   body{
-      margin: 0;
+    margin: 0;
   }
 
   .topnav {
@@ -45,12 +45,17 @@
   }
 
   .topnav .menu-actions {
-    margin: 0 10px;
-    text-align: center;
     
     padding: 20px ;
-    text-decoration: none;
-    color: rgb(41, 40, 40)
+    color: rgb(41, 40, 40);
+
+
+    background-color: transparent;
+    border: transparent;
+    border-radius: 50%;
+    margin: 0 10px;
+    color: aliceblue;
+    cursor: pointer;
   }
 
   .topnav .home-title:hover,.menu-actions:hover{
@@ -59,14 +64,15 @@
   }
 
   .projectContainer{
-    padding-left:16px;
+    padding: 20px 16px;
   }
 
   .listContainer {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    width: 100%;
+    flex: 1 0 auto;
+    justify-content: center;
     margin: 1em 0;
     padding: 20px;
     height: 100%;
@@ -81,16 +87,13 @@
 .projectItem {
     list-style: none;
     display: inline-block;
-    width: calc(100% / 5);
+    width: 20%;
    
     text-align: justify;
-    margin: 10px 5px;
-    padding: 10px;
+    margin: 10px 2%;
+    padding: 5px;
     padding-top: 20px;
-}
-.projectItem .title{
-  padding-bottom: 50px;
-  font-size: 25px;
+    border-radius: 5px;
 }
 
 .projectItem.onProgress{
@@ -98,6 +101,9 @@
 }
 .projectItem.success{
   background-color: #00bb64;
+}
+.projectItem .title{
+  font-size: 20px;
 }
 
 .itemContent{
