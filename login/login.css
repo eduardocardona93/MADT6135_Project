@@ -55,7 +55,7 @@ body {
 
 .container,
 .form__input,
--form__button {
+.form__button {
     font: 500 1rem 'Quicksand', sans-serif;
 }
 

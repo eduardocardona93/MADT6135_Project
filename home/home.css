@@ -9,9 +9,14 @@
     flex-direction: row;
     flex: 1 0 auto ;
     justify-content: space-between;
+    font: 500 1rem 'Quicksand', sans-serif;
   }
   
   /* Style the links inside the navigation bar */
+
+  .projectContainer {
+    font: 500 1rem 'Quicksand', sans-serif;
+  }
 
   .topnav .actions{
 
@@ -59,12 +64,17 @@
   }
 
   .topnav .home-title:hover,.menu-actions:hover{
-    background-color: #ddd;
+    background-color: #005780;
     border-radius: 5%;
   }
 
   .projectContainer{
     padding: 20px 16px;
+    
+  }
+
+  .projectContainer h2{
+    margin-left: 1rem;
   }
 
   .listContainer {
@@ -87,10 +97,10 @@
 .projectItem {
     list-style: none;
     display: inline-block;
-    width: 20%;
+    width: 28%;
    
     text-align: justify;
-    margin: 10px 2%;
+    margin: 8px 2%;
     padding: 5px;
     padding-top: 20px;
     border-radius: 5px;
@@ -104,10 +114,13 @@
 }
 .projectItem .title{
   font-size: 20px;
+  color: #ffffff;
+  padding-left: 0.7rem;
+  font-style: oblique;
 }
 
 .itemContent{
   margin-top: 10px;
   background-color: white;
-  padding: 10px 5px;
+  padding: 10px 10px 5px 10px;
 }
