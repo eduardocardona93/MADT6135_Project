@@ -16,6 +16,10 @@ var generateUniqueId = () => {
     }
 }
 
+var saveCurrentUser = (user) => {
+    localStorage.setItem("currentUser", JSON.stringify(user));
+}
+
 var addUser = (user) => {
     // fetching all users
     var users = getAllUsers();
@@ -39,31 +43,40 @@ var validateEmail = (email) => {
 }
 
 var loginUser = (unameOrEmail, password) => {
+
+    var foundUser = null;
+    console.log("user: " + unameOrEmail + ", pass: " + password);
     
     if(validateEmail(unameOrEmail)) {
         // email login
-        let email = unameOrEmail;
+        console.log("user entered email");
+        // let email = unameOrEmail;
 
         getAllUsers().forEach( user => {
-            if(email == user.email && password == user.password) {
+            console.log(user);
+            if(unameOrEmail == user.email && password == user.password) {
                 // return logged in user
-                return user;
+                foundUser = user;
             }
         });
     }
     else {
         // username login
-        let uname = unameOrEmail
+        console.log("user entered username");
+        // let uname = unameOrEmail
 
         getAllUsers().forEach( user => {
-            if(uname == user.name && password == user.password) {
+            console.log(user)
+            console.log(unameOrEmail == user.name && password == user.password)
+            if(unameOrEmail == user.name && password == user.password) {
                 // return logged in user
-                return user;
+                console.log(user);
+                foundUser = user;
             }
         })
     }
 
-    return null;
+    return foundUser;
     
 }
 

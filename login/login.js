@@ -34,7 +34,28 @@ function clearInputError(inputElement) {
     inputElement.parentElement.querySelector(".form__input-error-message").textContent = "";
 }
 
-function validateInfo(signupForm) {
+function validateLoginInfo(loginForm) {
+    var succes = false;
+    if(login_inputEmail.value == "" || login_inputPassword.value == "") {
+        succes = false;
+        setFormMessage(loginForm, "error", "Enter email address and password!");
+    }
+
+    var loggedInUser = loginUser(login_inputEmail.value, login_inputPassword.value);
+    console.log(loggedInUser);
+    if(loggedInUser == null) {
+        succes = false;
+        setFormMessage(loginForm, "error", "Invalid username or password");
+    }
+    else {
+        succes = true;
+        saveCurrentUser(loggedInUser);
+    }
+
+    return succes;
+}
+
+function validateSignupInfo(signupForm) {
     if(signup_inputUname.value == "" || signup_inputEmail.value == "" ||
         signup_inputPassword == "" || signup_inputConfirmPassword == "" ||
         signup_inputHourlyRate == "") {
@@ -76,21 +97,23 @@ document.addEventListener("DOMContentLoaded", () => {
     loginForm.addEventListener("submit", e => {
         e.preventDefault();
 
-        // To perform AJAX/Fetch login
+        if(validateLoginInfo(loginForm)) {
+            location.href = "/home/home.html";
+        }
 
-        setFormMessage(loginForm, "error", "Invalid username or password");
+        
     });
 
     createAccountForm.addEventListener("submit", e => {
         e.preventDefault();
 
-        if(validateInfo(createAccountForm)) {
+        if(validateSignupInfo(createAccountForm)) {
             var user = {
                 id: generateUniqueId(),
-                name: document.getElementById("signupUsername").value,
-                email: document.getElementById("signupEmail").value,
-                password: document.getElementById("signupPassword").value,
-                rate: document.getElementById("signupHourlyRate").value
+                name: signup_inputUname.value,
+                email: signup_inputEmail.value,
+                password: signup_inputPassword.value,
+                rate: signup_inputHourlyRate.value
             };
             
             addUser(user);
