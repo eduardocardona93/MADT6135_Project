@@ -34,7 +34,7 @@ function clearInputError(inputElement) {
     inputElement.parentElement.querySelector(".form__input-error-message").textContent = "";
 }
 
-function validateLoginInfo(loginForm) {
+function login(loginForm) {
     var succes = false;
     if(login_inputEmail.value == "" || login_inputPassword.value == "") {
         succes = false;
@@ -79,6 +79,18 @@ function validateSignupInfo(signupForm) {
 
 // execution starts when content loaded
 document.addEventListener("DOMContentLoaded", () => {
+
+    // todo: shift this code to home screen -- logout when main screen window closes
+    // window.addEventListener('beforeunload', function(e) {
+    //     var e = e || window.event;
+
+    //     if(e) {
+    //         // logout
+    //         logoutCurrentUser();
+    //     }
+
+    // }, false);
+
     const loginForm = document.querySelector("#login");
     const createAccountForm = document.querySelector("#createAccount");
 
@@ -97,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loginForm.addEventListener("submit", e => {
         e.preventDefault();
 
-        if(validateLoginInfo(loginForm)) {
+        if(login(loginForm)) {
             location.href = "/home/home.html";
         }
 
@@ -117,6 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
             };
             
             addUser(user);
+            saveCurrentUser(user);
     
             // location.replace("/home/home.html");
             location.href = "/home/home.html";

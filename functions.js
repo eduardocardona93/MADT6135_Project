@@ -1,3 +1,5 @@
+//#region login, logout related functions
+
 var getAllUsers = () => {
     return JSON.parse(localStorage.getItem("users") || "[]");
 }
@@ -79,4 +81,30 @@ var loginUser = (unameOrEmail, password) => {
     return foundUser;
     
 }
+
+var logoutCurrentUser = () => {
+    localStorage.removeItem("currentUser");
+    console.log("User Logout!");
+}
+
+var isUserLoggedIn = () => {
+    var user = localStorage.getItem("currentUser");
+    console.log(user);
+
+    if(user != null && user != "") {
+        return true;
+    }
+    else {
+        return false;
+    }
+
+}
+
+//#endregion
+
+//#region Projects related functions
+
+
+
+//#endregion
 
