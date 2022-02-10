@@ -2,9 +2,23 @@ var getAllUsers = () => {
     return JSON.parse(localStorage.getItem("users") || "[]");
 }
 
+var generateUniqueId = () => {
+    var idArr = [];
+    getAllUsers().forEach(element => {
+        idArr.push(element.id);
+    });
+
+    if(idArr.length > 0) {
+        return idArr.length + 1;
+    }
+    else {
+        return 1;
+    }
+}
+
 var addUser = (user) => {
     // fetching all users
-    var users = JSON.parse(localStorage.getItem("users") || "[]");
+    var users = getAllUsers();
 
     // logging the users
     console.log("# of users: " + users.length);
