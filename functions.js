@@ -4,18 +4,45 @@ var getAllUsers = () => {
     return JSON.parse(localStorage.getItem("users") || "[]");
 }
 
-var generateUniqueId = () => {
-    var idArr = [];
-    getAllUsers().forEach(element => {
-        idArr.push(element.id);
-    });
+var generateUniqueId = (idOfWhat) => {
 
-    if(idArr.length > 0) {
-        return idArr.length + 1;
+    // generate User Id
+    if(idOfWhat == "userId") {
+        var idArr = [];
+        getAllUsers().forEach(element => {
+            idArr.push(element.id);
+        });
+
+        if(idArr.length > 0) {
+            return idArr.length + 1;
+        }
+        else {
+            return 1;
+        }
     }
-    else {
-        return 1;
+
+    // generate Project Id
+    else if(idOfWhat == "projectId") {
+        var idArr = [];
+        getAllProjects().forEach(element => {
+            idArr.push(element.id);
+        });
+
+        if(idArr.length > 0) {
+            return idArr.length + 1;
+        }
+        else {
+            return 1;
+        }
     }
+
+    // generate Task Id
+    else if(idOfWhat == "taskId") {
+        // todo: generate Id for Tasks
+
+    }
+
+    
 }
 
 var saveCurrentUser = (user) => {
@@ -104,7 +131,32 @@ var isUserLoggedIn = () => {
 
 //#region Projects related functions
 
+var addProject = (project) => {
+    // fetching all projects
+    var projects = getAllProjects();
+    console.log("# of projects: " + users.length);
 
+    projects.forEach(function(project, index) {
+        console.log("[" + index + "]: " + project.id);
+    });
+
+    projects.push(project);
+    console.log("Added project #" + project.id);
+
+    // Saving
+    localStorage.setItem("projects", JSON.stringify(projects));
+};
+
+var getAllProjects = () => {
+    return JSON.parse(localStorage.getItem("projects") || "[]");
+}
+
+var getProjects = (userId) => {
+    var userProjects = [];
+    // getAllProjects.forEach( () => {
+    //     if()
+    // })
+}
 
 //#endregion
 

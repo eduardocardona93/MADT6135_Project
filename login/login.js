@@ -80,17 +80,6 @@ function validateSignupInfo(signupForm) {
 // execution starts when content loaded
 document.addEventListener("DOMContentLoaded", () => {
 
-    // todo: shift this code to home screen -- logout when main screen window closes
-    // window.addEventListener('beforeunload', function(e) {
-    //     var e = e || window.event;
-
-    //     if(e) {
-    //         // logout
-    //         logoutCurrentUser();
-    //     }
-
-    // }, false);
-
     const loginForm = document.querySelector("#login");
     const createAccountForm = document.querySelector("#createAccount");
 
