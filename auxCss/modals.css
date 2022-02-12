@@ -12,6 +12,7 @@
     box-sizing: border-box;
     padding: var(--gap);
     background: rgba(0,0,0,0.5);
+    font: 500 1rem 'Quicksand', sans-serif;;
   }
   
   .modal--inner{
@@ -45,7 +46,7 @@
   }
   
   .modal--content{
-     padding: 0 var(--gap);
+     padding: 25 var(--gap);
      line-height: 1.5;
   }
   
@@ -56,17 +57,23 @@
   .modal--button{
     display: inline-block;
     padding: 5px 12px;
+    margin-left: 10px;
     background: none;
     border: none;
     outline: none;
     background-color: #2696ff;
     border-radius: 3px;
-  color: white;
-  cursor: pointer;
-  font-size: 18px;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
   
   }
+  .modal--button.close{
+
+    background-color: grey;
+
   
+  }
   .modal--button:hover{
     background-color: #005780;
   
