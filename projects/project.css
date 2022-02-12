@@ -1,83 +1,113 @@
-body{
-    margin: 0;
-  }
-
-
-  /*  Project list  */
-  .projectContainer{
-    padding: 20px 16px;
-    
-  }
-
-  .projectContainer h2{
-    margin-left: 1rem;
-    margin-top: 1rem;
-    padding-top: 0rem;
-  }
-
-  .projectManager {
-      padding-left: 1rem;
-  }
-
-  .mem {
-      margin-left: 1rem;
-  }
-  /*.listContainer {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    flex: 1 0 auto;
-    justify-content: center;
-    margin: 1em 0;
-    padding: 20px;
-    height: 100%;
-  } */ 
-.projectList{
-    width: 100%;
-    height: 100%;
-
-    padding-left: 0;
+/*//////////// dropdown menu ///////////*/
+.dropbtn {
+  background-color: #2696ff;
+  color: white;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
 }
 
-.projectItem {
-  list-style: none;
+.dropbtn:hover, .dropbtn:focus {
+  background-color: #2980B9;
+}
+
+.dropdown {
+  position: relative;
   display: inline-block;
-  width: 28%;
+  margin-left: 1rem;
+}
 
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  overflow: auto;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown a:hover {background-color: #ddd;}
+
+.show {display: block;}
+
+/*//////// texts and inputs ///////*/
+.container, h3 {
+  font: 500 1rem 'Quicksand', sans-serif;
+  margin-left: 1rem;
+  font-weight: bold;
+  margin-top: 0.2rem;
+}
+
+.container , .taskDescription {
+  width: 97%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.containTitle {
+  margin-top: 1rem;
+}
+
+
+.projectTitle {
+  margin-left: 1rem;
+  height: 18px;
+  width: 40%;
+}
+
+.containTTitle {
+  margin-top: 1rem;
+}
+
+
+.taskTitle {
+  margin-left: 1rem;
+  height: 18px;
+  width: 40%;
+}
+
+.taskDescription {
   text-align: justify;
-  margin: 8px 2%;
-  padding: 5px;
-  padding-top: 20px;
-  border-radius: 5px;
+  height: 5rem;
+  font-size: 16px;
+  max-lines: 4;
 }
 
-.projectItem.onProgress{
-  background-color: gray;
+textarea  {
+  resize: none;
 }
-.projectItem.success{
-  background-color: #00bb64;
-}
-.projectItem .title{
-  font-size: 20px;
-  color: #ffffff;
-  padding-left: 0.7rem;
-  font-style: oblique;
-}
-.itemContent{
-  margin-top: 10px;
-  background-color: white;
-  padding: 10px 10px 5px 10px;
-}
+
+/*/////////////// chips /////////////*/
 
 .chip {
   display: inline-block;
-  padding: 0 25px;
-  height: 50px;
+  padding: 0 15px;
+  height: 40px;
   font-size: 16px;
-  line-height: 50px;
+  line-height: 40px;
   border-radius: 25px;
   background-color: #f1f1f1;
-  margin-right: 0.7rem;
+  margin-left: 1rem;
+}
+
+.chip img {
+  /*float: left;*/
+  display: none;
+ /*margin: 0 10px 0 -25px;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;*/
 }
 
 .closebtn {
