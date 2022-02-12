@@ -1,7 +1,7 @@
 (function() {
     'use strict'
 
-    insertNavBar()
+    insertNavBar('projects');
     const urlSearchParams = new URLSearchParams(window.location.search);
     
     const projectId = urlSearchParams.get('id');
