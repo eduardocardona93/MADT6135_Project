@@ -42,10 +42,10 @@
   border-radius: 5px;
 }
 
-.projectItem.onProgress{
+.projectItem.inProgress{
   background-color: gray;
 }
-.projectItem.success{
+.projectItem.completed{
   background-color: #00bb64;
 }
 .projectItem .title{

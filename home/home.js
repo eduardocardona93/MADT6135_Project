@@ -1,5 +1,9 @@
+var loggedInUser = null;
+
 (function() {
-  if(!isUserLoggedIn()) {
+  user = getLoggedInUser();
+  if(loggedInUser == null || loggedInUser == "") {
+    console.log("logging out");
     location.href = "../index.html";
   }
 
@@ -10,36 +14,48 @@
 let projectList = document.getElementById("projectList")
 
 // REPLACE THIS FOR THE PROJECT LOGIC
-let projects = [
-  {id:1, title:"Project 1", leaderName: 'Keval Langalia',  members: [1,2,3,4] ,progress: 'onProgress'},
-  {id:1, title:"Project 2", leaderName: 'Keval Langalia',  members: [1,2,3,4,5] ,progress: 'success'},
-  {id:1, title:"Project 3", leaderName: 'Eduardo Cardona', members: [3,4,6] , progress: 'onProgress'},
-  {id:1, title:"Project 4", leaderName: 'Keval Langalia',  members: [1,2,3,4,7] ,progress: 'onProgress'},
-  {id:1, title:"Project 5", leaderName: 'Lino Hernandez',  members: [1,2,5,8] ,progress: 'success'},
-  {id:1, title:"Project 6", leaderName: 'Keval Langalia',  members: [1,2,3,4,6] ,progress: 'onProgress'},
-  {id:1, title:"Project 6", leaderName: 'Keval Langalia',  members: [1,2,3,4,6] ,progress: 'onProgress'},
-  {id:1, title:"Project 6", leaderName: 'Keval Langalia',  members: [1,2,3,4,6] ,progress: 'onProgress'},
-  {id:1, title:"Project 6", leaderName: 'Keval Langalia',  members: [1,2,3,4,6] ,progress: 'onProgress'},
-  {id:1, title:"Project 6", leaderName: 'Keval Langalia',  members: [1,2,3,4,6] ,progress: 'onProgress'},
-  {id:1, title:"Project 6", leaderName: 'Keval Langalia',  members: [1,2,3,4,6] ,progress: 'onProgress'},
-  {id:1, title:"Project 6", leaderName: 'Keval Langalia',  members: [1,2,3,4,6] ,progress: 'onProgress'},
-  {id:1, title:"Project 6", leaderName: 'Keval Langalia',  members: [1,2,3,4,6] ,progress: 'onProgress'},
-  {id:1, title:"Project 6", leaderName: 'Keval Langalia',  members: [1,2,3,4,6] ,progress: 'onProgress'},
-  {id:1, title:"Project 6", leaderName: 'Keval Langalia',  members: [1,2,3,4,6] ,progress: 'onProgress'},
-  {id:1, title:"Project 6", leaderName: 'Keval Langalia',  members: [1,2,3,4,6] ,progress: 'onProgress'},
-  {id:1, title:"Project 6", leaderName: 'Keval Langalia',  members: [1,2,3,4,6] ,progress: 'onProgress'},
-  {id:1, title:"Project 6", leaderName: 'Keval Langalia',  members: [1,2,3,4,6] ,progress: 'onProgress'},
-  {id:1, title:"Project 6", leaderName: 'Keval Langalia',  members: [1,2,3,4,6] ,progress: 'onProgress'},
-  {id:1, title:"Project 6", leaderName: 'Keval Langalia',  members: [1,2,3,4,6] ,progress: 'onProgress'},
-]
+function generateDummyProjects() {
+  var projects = [];
+
+  function randomLeader() {
+    var leaders = ["Keval Langalia", "Eduardo Cardona", "Lino Hernandez"];
+    return leaders[Math.floor(Math.random() * 3)];
+  }
+
+  function randomStatus() {
+    var statuses = ["inProgress", "completed"];
+    return statuses[Math.floor(Math.random() * 2)];
+  }
+
+  for(let i = 1; i <= 15; i++) {
+    var proj = {
+      id: i,
+      title: "Project " + i,
+      leaderName: randomLeader(),
+      leaderId: Math.floor(Math.random() * 3),
+      members: [1, 2, 3, 4, 5, 6],
+      status: randomStatus()
+    }
+
+    projects.push(proj);
+  }
+
+  return projects;
+}
 
 // start execution when Content Loaded
 document.addEventListener("DOMContentLoaded", () => {
 
+  generateDummyProjects().forEach( proj => {
+    addProject(proj);
+  });
+
+  let projects = getAllProjects();
+
   projects.forEach(project => {
     let projectItem = document.createElement('li');
     projectItem.classList.add('projectItem');
-    projectItem.classList.add(project.progress);
+    projectItem.classList.add(project.status);
     
     let title = document.createElement('span');
     title.classList.add('title');
@@ -68,17 +84,18 @@ document.addEventListener("DOMContentLoaded", () => {
     logoutCurrentUser();
     location.href = "../index.html";
   });
-    
-  window.addEventListener('beforeunload', function(e) {
-        var e = e || window.event;
 
-        if(e) {
-            // logout
-            logoutCurrentUser();
-        }
+  // todo: commenting because this cause logout even when user refreshes page
+  // window.addEventListener('beforeunload', function(e) {
+  //       var e = e || window.event;
 
-    }, false);
+  //       if(e) {
+  //           // logout
+  //           logoutCurrentUser();
+  //       }
 
+  //   }, false);
+  //#endregion
 
   // Code to show Modal
   const buttons = [  {

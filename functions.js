@@ -127,6 +127,13 @@ var isUserLoggedIn = () => {
 
 }
 
+var getLoggedInUser = () => {
+    var user = localStorage.getItem("currentUser");
+    console.log(user);
+
+    return user;
+}
+
 //#endregion
 
 //#region Projects related functions
@@ -134,11 +141,7 @@ var isUserLoggedIn = () => {
 var addProject = (project) => {
     // fetching all projects
     var projects = getAllProjects();
-    console.log("# of projects: " + users.length);
-
-    projects.forEach(function(project, index) {
-        console.log("[" + index + "]: " + project.id);
-    });
+    console.log("# of projects: " + projects.length);
 
     projects.push(project);
     console.log("Added project #" + project.id);
@@ -153,9 +156,13 @@ var getAllProjects = () => {
 
 var getProjects = (userId) => {
     var userProjects = [];
-    // getAllProjects.forEach( () => {
-    //     if()
-    // })
+    getAllProjects.forEach( project => {
+        if(project.members.includes(userId)) {
+            userProjects.push(project);
+        }
+    })
+
+    return userProjects;
 }
 
 //#endregion
