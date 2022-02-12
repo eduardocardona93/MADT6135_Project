@@ -1,4 +1,3 @@
-const modalObj = this;
 function showModal(titleHtml, contentHtml, buttons) {
   
     const modal = document.createElement("div");
@@ -15,7 +14,7 @@ function showModal(titleHtml, contentHtml, buttons) {
               <div class="modal--bottom"></div>
           </div>
       `;
-  
+    console.log(modal.innerHTML)
     for (const button of buttons) {
       const element = document.createElement("button");
   
@@ -29,8 +28,7 @@ function showModal(titleHtml, contentHtml, buttons) {
         if (button.triggerClose) {
           document.body.removeChild(modal, );
         }
-  
-        button.onClick(modal,modalObj);
+        button.onClick(modal);
       });
   
       modal.querySelector(".modal--bottom").appendChild(element);
@@ -43,22 +41,9 @@ function showModal(titleHtml, contentHtml, buttons) {
     document.body.appendChild(modal);
   }
 
+// Form Input methods 
 
 
-function setFormMessage(formElement, type, message) {
-    const messageElement = formElement.querySelector(".form__message");
-
-    messageElement.textContent = message;
-    messageElement.classList.remove("form__message--succes", "form__message--error")
-    messageElement.classList.add(`form__message--${type}`);
-}
-
-function clearFormMessage(formElement) {
-    const messageElement = formElement.querySelector(".form__message");
-
-    messageElement.textContent = "";
-    messageElement.classList.remove("form__message--succes", "form__message--error")
-}
 
 function setInputError(inputElement, message) {
     inputElement.classList.add("form__input--error");

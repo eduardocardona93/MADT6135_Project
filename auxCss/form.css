@@ -136,3 +136,7 @@ body {
 .form__link:hover {
     text-decoration: underline;
 }
+
+.form__input-group_hidden{
+    display: none;
+}

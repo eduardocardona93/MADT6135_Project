@@ -1,8 +1,7 @@
 (function() {
     'use strict'
     insertNavBar();
-    const currentUser = getCurrentUser();
-    // REPLACE THIS FOR THE PROJECT LOGIC
+    // REPLACE THIS FOR THE GET ALL PROJECTS LOGIC
     let projects = [
         {id:1, title:"Project 1", leaderName: 'Keval Langalia',  members: [1,2,3,4] ,progress: 'onProgress'},
         {id:1, title:"Project 2", leaderName: 'Keval Langalia',  members: [1,2,3,4,5] ,progress: 'success'},
@@ -28,7 +27,6 @@
     
     
     document.getElementById("createNewProject").addEventListener('click', showProjectDialog)
-    const projectList = document.getElementById("projectList")
 
     projects.forEach(project => {
         let projectItem = document.createElement('li');
@@ -54,61 +52,71 @@
         projectItem.appendChild(title);
         projectItem.appendChild(itemContent);
 
-        projectList.appendChild(projectItem)
+        document.getElementById("projectList").appendChild(projectItem)
     });
 
 
     function showProjectDialog(){
       const title = 'Create New Project'
-      const buttons = [  {
-        label: "Save Project",
-        onClick: (modal,modalObj) => {
-          const projectTitleEl = document.getElementById('projectTitle');
-          const projectMembersEl = document.getElementById('projectMembers');
-          const projectDescriptionEl = document.getElementById('projectDescription');
-          
-          if (projectTitleEl.value == "" ) {
-            modalObj.setInputError(projectTitleEl,"Please enter a title")
-          }else{
-            modalObj.clearInputError(projectTitleEl);
-            setInputSuccess(projectTitleEl);
-          } 
-          if (projectMembersEl.value == "" ) {
-            modalObj.setInputError(projectMembersEl,"Please select at least one member")
-          }else {
-            modalObj.clearInputError(projectMembersEl);
-            setInputSuccess(projectMembersEl);
-          }
-          if (projectDescriptionEl.value == "" ) {
-            modalObj.setInputError(projectDescriptionEl,"Please enter a description")
-          }else{
-            modalObj.clearInputError(projectDescriptionEl);
-            setInputSuccess(projectDescriptionEl);
-          }
-          if(projectTitleEl.value !== "" && projectMembersEl.value !== "" && projectDescriptionEl.value !== ""){
-            const newProjectObj = {
-              'id' : 0, // <--------------------- get id from local storage
-              'title' :projectTitleEl.value , 
-              'leaderName' : currentUser.name, 
-              'leaderId' : currentUser.id, 
-              'members' : projectMembersEl.value, 
-              'progress' : projectDescriptionEl.value, 
+      // MODAL BUTTONS
+      const buttons = [  
+        { // SAVE BUTTON
+          label: "Save Project",
+          onClick: (modal) => {
+            // SAVE PROJECT DATA
+            const projectTitleEl = document.getElementById('projectTitle');
+            const projectMembersEl = document.getElementById('projectMembers');
+            const projectDescriptionEl = document.getElementById('projectDescription');
+            // VALIDATIONS FOR THE MODAL FORM
+            if (projectTitleEl.value == "" ) {
+              setInputError(projectTitleEl,"Please enter a title")
+            }else{
+              clearInputError(projectTitleEl);
+              setInputSuccess(projectTitleEl);
+            } 
+            if (projectMembersEl.value == "" ) {
+              setInputError(projectMembersEl,"Please select at least one member")
+            }else {
+              clearInputError(projectMembersEl);
+              setInputSuccess(projectMembersEl);
             }
-            document.body.removeChild(modal)
-          }
+            if (projectDescriptionEl.value == "" ) {
+              setInputError(projectDescriptionEl,"Please enter a description")
+            }else{
+              clearInputError(projectDescriptionEl);
+              setInputSuccess(projectDescriptionEl);
+            }
+            // SAVE THE FORM
+            if(projectTitleEl.value !== "" && projectMembersEl.value !== "" && projectDescriptionEl.value !== ""){
+              const newProjectObj = {
+                'id' : 0, // <--------------------- get id from local storage
+                'title' :projectTitleEl.value , 
+                'leaderName' : currentUser.name, 
+                'leaderId' : currentUser.id, 
+                'members' : projectMembersEl.value, 
+                'progress' : projectDescriptionEl.value, 
+              }
+              console.log(newProjectObj)
+              document.body.removeChild(modal); // CLOSE WINDOWS
+            }
+          },
+          triggerClose: false
         },
-        triggerClose: false
-      },
-      {
-        label: "Close",
-        type: 'close',
-        onClick: (modal) => {},
-        triggerClose: true
-      }]
-      let membersHtml = getAllUsers().filter(user => user.id != currentUser.id).reduce( (x,a) => {
-        return x +=`<option value="${a.id}">${a.name}</option>`;
+        { // CLOSE WINDOWS
+          label: "Close",
+          type: 'close',
+          onClick: (modal) => {},
+          triggerClose: true
+        }
+      ]
+
+      // GET ALL USERS BUT THE CURRENT USER
+      let membersHtml = getAllUsers().reduce( (x,a) => {
+        const currentUserLabel = (a.id === currentUser.id) ?  "(Me)" : "";
+        return x +=`<option value="${a.id}">${a.name} ${currentUserLabel}</option>`;
       } , "") ;
-      console.log(membersHtml)
+
+
       const divContainer = document.createElement("div");
         divContainer.innerHTML = `
           <form class ="form" id="formProject">

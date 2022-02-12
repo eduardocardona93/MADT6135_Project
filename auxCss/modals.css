@@ -12,6 +12,7 @@
     box-sizing: border-box;
     padding: var(--gap);
     background: rgba(0,0,0,0.5);
+    font: 500 1rem 'Quicksand', sans-serif;;
   }
   
   .modal--inner{
@@ -45,7 +46,7 @@
   }
   
   .modal--content{
-     padding: 0 var(--gap);
+     padding: 25 var(--gap);
      line-height: 1.5;
   }
   
