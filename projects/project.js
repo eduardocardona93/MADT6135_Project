@@ -22,7 +22,11 @@
     let projects = [
     {id:1, title:"Task #1", description: 'Order the boxes to deliver',  members: [1,2,3,4,6] ,progress: 'onProgress'},
     {id:1, title:"Task #2", description: 'Track orders',  members: [1,2,3,4,6] ,progress: 'onProgress'},
-    {id:1, title:"Task #3", description: 'Charge customers',  members: [1,2,3,4,6] ,progress: 'onProgress'},
+    {id:1, title:"Task #3", description: 'Charge customers',  members: [1,2,3,4,6] ,progress: 'success'},
+    ]
+
+    let loggedMembers = [
+      {id:1, memberName:"member 1"},{id:1, memberName:"member 2"},
     ]
 
     let projectList = document.getElementById("taskList")
@@ -41,17 +45,32 @@
 
         let p1 = document.createElement('p');
         p1.innerHTML = "<p><b>Task description: </b><span>"+ project.description+"</span></p>"
-
-        let p2 = document.createElement('p');
-        p2.innerHTML = "<p><b>Members assigned: </b><span>"+ project.members.length+"</span></p>"
-
+        
+      
         itemContent.appendChild(p1);
-        itemContent.appendChild(p2);
+
 
         projectItem.appendChild(title);
         projectItem.appendChild(itemContent);
 
-        projectList.appendChild(projectItem)
+        projectList.appendChild(projectItem);
+
+        loggedMembers.forEach(loggedMember => {
+          let memberItem = document.createElement('li');
+          memberItem.classList.add('memberItem');
+          memberItem.classList.add(loggedMember.loggedMembers);
+
+          let memberTasked = document.createElement('div');
+          memberTasked.classList.add('chip');
+          itemContent.appendChild(memberTasked);
+
+          let memberTaskedname = document.createElement('span');
+          //memberTaskedname.classList.add('memberName');//
+          memberTaskedname.innerText = loggedMember.memberName;
+
+          memberItem.appendChild(memberTaskedname);
+        })
+        
     });
     const buttons = [  {
         label: "Got it!",
