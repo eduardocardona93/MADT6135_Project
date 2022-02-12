@@ -1,7 +1,7 @@
 (function() {
     'use strict'
-    // insertNavBar();
-
+    insertNavBar();
+    const currentUser = getCurrentUser();
     // REPLACE THIS FOR THE PROJECT LOGIC
     let projects = [
         {id:1, title:"Project 1", leaderName: 'Keval Langalia',  members: [1,2,3,4] ,progress: 'onProgress'},
@@ -25,9 +25,10 @@
         {id:1, title:"Project 6", leaderName: 'Keval Langalia',  members: [1,2,3,4,6] ,progress: 'onProgress'},
         {id:1, title:"Project 6", leaderName: 'Keval Langalia',  members: [1,2,3,4,6] ,progress: 'onProgress'},
     ]
-
-
-    let projectList = document.getElementById("projectList")
+    
+    
+    document.getElementById("createNewProject").addEventListener('click', showProjectDialog)
+    const projectList = document.getElementById("projectList")
 
     projects.forEach(project => {
         let projectItem = document.createElement('li');
@@ -55,19 +56,83 @@
 
         projectList.appendChild(projectItem)
     });
-    const buttons = [  {
-        label: "Got it!",
-        onClick: (modal) => {
-          console.log("The button was clicked!");
+
+
+    function showProjectDialog(){
+      const title = 'Create New Project'
+      const buttons = [  {
+        label: "Save Project",
+        onClick: (modal,modalObj) => {
+          const projectTitleEl = document.getElementById('projectTitle');
+          const projectMembersEl = document.getElementById('projectMembers');
+          const projectDescriptionEl = document.getElementById('projectDescription');
+          
+          if (projectTitleEl.value == "" ) {
+            modalObj.setInputError(projectTitleEl,"Please enter a title")
+          }else{
+            modalObj.clearInputError(projectTitleEl);
+            setInputSuccess(projectTitleEl);
+          } 
+          if (projectMembersEl.value == "" ) {
+            modalObj.setInputError(projectMembersEl,"Please select at least one member")
+          }else {
+            modalObj.clearInputError(projectMembersEl);
+            setInputSuccess(projectMembersEl);
+          }
+          if (projectDescriptionEl.value == "" ) {
+            modalObj.setInputError(projectDescriptionEl,"Please enter a description")
+          }else{
+            modalObj.clearInputError(projectDescriptionEl);
+            setInputSuccess(projectDescriptionEl);
+          }
+          if(projectTitleEl.value !== "" && projectMembersEl.value !== "" && projectDescriptionEl.value !== ""){
+            const newProjectObj = {
+              'id' : 0, // <--------------------- get id from local storage
+              'title' :projectTitleEl.value , 
+              'leaderName' : currentUser.name, 
+              'leaderId' : currentUser.id, 
+              'members' : projectMembersEl.value, 
+              'progress' : projectDescriptionEl.value, 
+            }
+            document.body.removeChild(modal)
+          }
         },
-        triggerClose: true
+        triggerClose: false
       },
       {
-        label: "Decline",
-        onClick: (modal) => {
-          console.log("DECLINED.");
-        },
+        label: "Close",
+        type: 'close',
+        onClick: (modal) => {},
         triggerClose: true
       }]
-    showModal('User edit', "<p>I am the content of this modal</p>", buttons)
+      let membersHtml = getAllUsers().filter(user => user.id != currentUser.id).reduce( (x,a) => {
+        return x +=`<option value="${a.id}">${a.name}</option>`;
+      } , "") ;
+      console.log(membersHtml)
+      const divContainer = document.createElement("div");
+        divContainer.innerHTML = `
+          <form class ="form" id="formProject">
+              <div class="form__input-group">
+                  <label for="projectTitle">Project Title</label>
+                  <input type="text" id="projectTitle" class="form__input" autofocus >
+                  <div class="form__input-error-message"></div>
+              </div>
+              <div class="form__input-group">
+                  <label for="projectMembers">Project Members</label>
+                  <select class="form__input" id="projectMembers" multiple autofocus>
+                    ${membersHtml}
+                  </select>
+                  <div class="form__input-error-message"></div>
+              </div>
+              <div class="form__input-group">
+                  <label for="projectDescription">Project Description</label>
+                  <textarea id="projectDescription" class="form__input" autofocus rows="4" cols="50"></textarea>  
+                  <div class="form__input-error-message"></div>
+              </div>
+          </form>
+        `;
+      showModal(title, divContainer.innerHTML, buttons)
+
+    }
+    
 }())

@@ -56,17 +56,23 @@
   .modal--button{
     display: inline-block;
     padding: 5px 12px;
+    margin-left: 10px;
     background: none;
     border: none;
     outline: none;
     background-color: #2696ff;
     border-radius: 3px;
-  color: white;
-  cursor: pointer;
-  font-size: 18px;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
   
   }
+  .modal--button.close{
+
+    background-color: grey;
+
   
+  }
   .modal--button:hover{
     background-color: #005780;
   

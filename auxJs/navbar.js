@@ -4,9 +4,9 @@ function insertNavBar(){
     div.innerHTML = `
         <div class="actions">
             <a class="home-title"  href="#">PJ Manager Pro</a>
-            <button class="menu-actions" title="Check current progress"  ><i class="fa fa-list-check fa-lg"></i></i></button>
-            <button class="menu-actions"  title="Create new project" ><i class="fa fa-folder-plus fa-xl"></i></button>
-            <button class="menu-actions"  title="Check current users" ><i class="fa fa-users fa-xl"></i></button>
+            <button id="" class="menu-actions" title="Check current progress"  ><i class="fa fa-list-check fa-lg"></i></i></button>
+            <button id="createNewProject" class="menu-actions"  title="Create new project" ><i class="fa fa-folder-plus fa-xl"></i></button>
+            <button id="checkCurrentUsers" class="menu-actions"  title="Check current users" ><i class="fa fa-users fa-xl"></i></button>
         </div>
         
         
@@ -16,7 +16,11 @@ function insertNavBar(){
         </div>
     `
 
-
-    
     document.body.insertBefore(div, document.body.firstChild);
+    
+    document.getElementById("createNewProject").addEventListener('click', showUsersDialog)
+    function showUsersDialog(){
+
+    }
+    
 }

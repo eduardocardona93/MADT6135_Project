@@ -19,7 +19,9 @@ var generateUniqueId = () => {
 var saveCurrentUser = (user) => {
     localStorage.setItem("currentUser", JSON.stringify(user));
 }
-
+var getCurrentUser = () => {
+    return JSON.parse(localStorage.getItem("currentUser"));
+}
 var addUser = (user) => {
     // fetching all users
     var users = getAllUsers();
