@@ -1,17 +1,23 @@
 
 let currentUser = getCurrentUser();
 
-function insertNavBar(){
+function insertNavBar(module = 'none'){
     const div = document.createElement("div");
     div.classList.add("topnav");
+
+    const modules = {
+        'projects' :  `<button id="createNewProject" class="menu-actions"  title="Create new project" ><i class="fa fa-folder-plus fa-xl"></i></button>
+                       <button id="checkCurrentUsers" class="menu-actions"  title="Check current users" ><i class="fa fa-users fa-xl"></i></button>`,
+        'tasks': '',
+        'none': '',
+    }
+
     div.innerHTML = `
         <div class="actions">
             <a class="home-title"  href="#">PJ Manager Pro</a>
             <button id="" class="menu-actions" title="Check current progress"  ><i class="fa fa-list-check fa-lg"></i></i></button>
-            <button id="createNewProject" class="menu-actions"  title="Create new project" ><i class="fa fa-folder-plus fa-xl"></i></button>
-            <button id="checkCurrentUsers" class="menu-actions"  title="Check current users" ><i class="fa fa-users fa-xl"></i></button>
+            ${modules[module] }
         </div>
-        
         
         <div class="actions">
             <button class="btn-action" id="profileBtn" title="My Profile"><i class="fa fa-user fa-lg"></i></button>
@@ -21,14 +27,11 @@ function insertNavBar(){
 
     document.body.insertBefore(div, document.body.firstChild);
     
-    document.getElementById("createNewProject").addEventListener('click', showUsersDialog)
     document.getElementById("profileBtn").addEventListener('click', showProfileDialog)
 
 }
 
-function showUsersDialog(){
 
-}
 
 function validateProfileDialog(){
     let validForm = true;

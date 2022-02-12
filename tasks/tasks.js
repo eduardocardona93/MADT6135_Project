@@ -1,6 +1,6 @@
 (function() {
     'use strict'
-    insertNavBar()
+    insertNavBar('tasks')
     const urlSearchParams = new URLSearchParams(window.location.search);
     
     const projectId = urlSearchParams.get('id');

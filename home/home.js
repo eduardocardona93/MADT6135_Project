@@ -1,6 +1,6 @@
 (function() {
     'use strict'
-    insertNavBar();
+    insertNavBar('projects');
     // REPLACE THIS FOR THE GET ALL PROJECTS LOGIC
     let projects = [
         {id:1, title:"Project 1", leaderName: 'Keval Langalia',  members: [1,2,3,4] ,progress: 'onProgress'},
@@ -27,6 +27,7 @@
     
     
     document.getElementById("createNewProject").addEventListener('click', showProjectDialog)
+    document.getElementById("checkCurrentUsers").addEventListener('click', showUsersDialog)
 
     projects.forEach(project => {
         let projectItem = document.createElement('li');
@@ -55,7 +56,43 @@
         document.getElementById("projectList").appendChild(projectItem)
     });
 
+    function showUsersDialog(){
+      const title = 'Users List';
+      const buttons = [  
+        { // CLOSE WINDOWS
+          label: "Close",
+          type: 'close',
+          onClick: (modal) => {},
+          triggerClose: true
+        }
+      ];
+      let usersHtml = getAllUsers().reduce( (x,a) => {
+        return x +=`<button type="button" class="collapsible">${a.name}</button>
+                    <div class="content">
+                      <p><b>Email: </b>${a.email}</p>
+                      <p><b>Rate: </b> $ ${parseFloat(a.rate)}</p>
+                    </div>`;
+      } , "") ;
+      const divContainer = document.createElement("div");
+      divContainer.innerHTML = `
+      <div class="form">${usersHtml}</div>
+      `;
+      showModal(title, divContainer.innerHTML, buttons);
+      document.querySelectorAll(".collapsible").forEach(element => {
+        element.addEventListener("click", function() {
+          this.classList.toggle("active");
+          var content = this.nextElementSibling;
+          if (content.style.maxHeight){
+            content.style.maxHeight = null;
+          } else {
+            content.style.maxHeight = content.scrollHeight + "px";
+          }
+        });
+      });
 
+
+      
+    }
     function showProjectDialog(){
       const title = 'Create New Project'
       // MODAL BUTTONS
