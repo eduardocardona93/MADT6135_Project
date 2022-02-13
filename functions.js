@@ -47,6 +47,18 @@ var generateUniqueId = (idOfWhat) => {
 
 var saveCurrentUser = (user) => {
     localStorage.setItem("currentUser", JSON.stringify(user));
+    updateUser(user);
+}
+
+var getCurrentUser = () => {
+    return JSON.parse(localStorage.getItem("currentUser"));
+}
+
+var updateUser = (user) => {
+    let users = getAllUsers();
+    const userIndex = users.findIndex(x => x.id === user.id);
+    users[userIndex] = user;
+    localStorage.setItem("users", JSON.stringify(users));
 }
 
 var addUser = (user) => {
