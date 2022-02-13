@@ -1,7 +1,7 @@
 var loggedInUser = null;
 
 (function() {
-  user = getLoggedInUser();
+  loggedInUser = getLoggedInUser();
   if(loggedInUser == null || loggedInUser == "") {
     console.log("logging out");
     location.href = "../index.html";
