@@ -1,6 +1,16 @@
 (function() {
     'use strict'
-    insertNavBar('projects');
+
+    loggedInUser = getLoggedInUser();
+    if(loggedInUser == null || loggedInUser == "") {
+      console.log("logging out");
+      location.href = "../index.html";
+    }
+    else {
+      insertNavBar('tasks');
+
+    }
+
     const urlSearchParams = new URLSearchParams(window.location.search);
     
     const projectId = urlSearchParams.get('id');
