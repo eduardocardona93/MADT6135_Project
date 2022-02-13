@@ -9,6 +9,14 @@
     <link rel="stylesheet" href="../auxCss/navbar.css">
     <link rel="stylesheet" href="../auxCss/form.css">    
     <link rel="stylesheet" href="../auxCss/modals.css">
+
+    <meta name="author" content="Syncfusion">
+    <link href="//cdn.syncfusion.com/ej2/ej2-base/styles/material.css" rel="stylesheet">
+    <link href="//cdn.syncfusion.com/ej2/ej2-inputs/styles/material.css" rel="stylesheet">
+    <link href="//cdn.syncfusion.com/ej2/ej2-dropdowns/styles/material.css" rel="stylesheet">
+    <link href="//cdn.syncfusion.com/ej2/ej2-buttons/styles/material.css" rel="stylesheet">
+    <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js" type="text/javascript"></script>
+
     <link rel="stylesheet" href="./project.css">
 </head>
 <body>
@@ -23,40 +31,25 @@
 
       <br>
       <h3>Task description</h3>
-      <textarea rows="4" cols="250" class="taskDescription"></textarea>
+      <textarea id="projectDescription" class="taskDescription" rows="4" cols="50" maxlength="500" placeholder="Type task description"></textarea>
       <br>
-      <div class="dropdown">
-      <button onclick="myFunction()" class="dropbtn">Members</button>
-      <div id="myDropdown" class="dropdown-content">
-        <a href="#home">Joan Mor</a>
-        <a href="#about">Lusia Lu</a>
-        <a href="#contact">Adolfo Ro</a>
-      </div>
     </div>
-    <div class="chip">
-      <img width="96" height="96">
-      Adolfo Ro
-      <span class="closebtn" onclick="this.parentElement.style.display='none'">&times;</span>
+
+    <div id="container" style="margin-left: 1rem; width:50%; font: 500 1rem 'Quicksand', sans-serif;">Select Members
+        <br>
+        <!--element which is going to render the MultiSelect-->
+        <input type="text" tabindex="1" id="select">
     </div>
-    </div>
-      <script src="../auxJs/navbar.js"></script>
-      <script src="project.js"></script>
-      <script>function myFunction(){
-        document.getElementById("myDropdown").classList.toggle("show");
-      }
+
+    <script>
+      var ele = document.getElementById('container');
+      if(ele) {
+          ele.style.visibility = "visible";
+       }   
+    </script>
       
-      // Close the dropdown if the user clicks outside of it
-      window.onclick = function(event) {
-        if (!event.target.matches('.dropbtn')) {
-          var dropdowns = document.getElementsByClassName("dropdown-content");
-          var i;
-          for (i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
-            if (openDropdown.classList.contains('show')) {
-              openDropdown.classList.remove('show');
-            }
-          }
-        }
-      }</script> 
+      <script src="../functions.js"></script>
+      <script src="../auxJs/navbar.js"></script>
+      <script src="project.js"></script> 
 </body>
 </html>
