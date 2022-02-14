@@ -102,7 +102,6 @@ document.addEventListener("DOMContentLoaded", () => {
             location.href = "/home/home.html";
         }
 
-        
     });
 
     createAccountForm.addEventListener("submit", e => {

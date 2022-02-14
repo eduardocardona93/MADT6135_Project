@@ -1,7 +1,9 @@
-var loggedInUser = null;
+var loggedInUser = getLoggedInUser();
 
+// This is to prevent user from opening home page if somehow he got logged out.
+// Alternatively, this is to prevent user from opening home page without logging in.
 (function() {
-  loggedInUser = getLoggedInUser();
+  // loggedInUser = getLoggedInUser();
   if(loggedInUser == null || loggedInUser == "") {
     console.log("logging out");
     location.href = "../index.html";
@@ -34,6 +36,7 @@ function generateDummyProjects() {
     var proj = {
       id: i,
       title: "Project " + i,
+      description: "Sample description",
       leaderName: randomLeader(),
       leaderId: Math.floor(Math.random() * 3),
       members: [1, 2, 3, 4, 5, 6],
@@ -86,6 +89,7 @@ function showUsersDialog(){
 
 function showProjectDialog(){
   const title = 'Create New Project'
+
   // MODAL BUTTONS
   const buttons = [  
     { // SAVE BUTTON
@@ -93,38 +97,50 @@ function showProjectDialog(){
       onClick: (modal) => {
         // SAVE PROJECT DATA
         const projectTitleEl = document.getElementById('projectTitle');
-        const projectMembersEl = document.getElementById('projectMembers');
+        const projectMembersEl = document.getElementById('container');
         const projectDescriptionEl = document.getElementById('projectDescription');
+
         // VALIDATIONS FOR THE MODAL FORM
         if (projectTitleEl.value == "" ) {
           setInputError(projectTitleEl,"Please enter a title")
         }else{
           clearInputError(projectTitleEl);
           setInputSuccess(projectTitleEl);
-        } 
-        if (projectMembersEl.value == "" ) {
-          setInputError(projectMembersEl,"Please select at least one member")
-        }else {
+        }
+
+        console.log(memberSelection.value);
+        if(memberSelection.value.length == 0) {
+          setInputError(projectMembersEl, "Please select at least one member");
+        }
+        else {
           clearInputError(projectMembersEl);
           setInputSuccess(projectMembersEl);
         }
+
         if (projectDescriptionEl.value == "" ) {
           setInputError(projectDescriptionEl,"Please enter a description")
         }else{
           clearInputError(projectDescriptionEl);
           setInputSuccess(projectDescriptionEl);
         }
+
+        console.log(loggedInUser);
         // SAVE THE FORM
-        if(projectTitleEl.value !== "" && projectMembersEl.value !== "" && projectDescriptionEl.value !== ""){
+        if(projectTitleEl.value !== "" && memberSelection.value.length > 0 && projectDescriptionEl.value !== ""){
           const newProjectObj = {
-            'id' : 0, // <--------------------- get id from local storage
-            'title' :projectTitleEl.value , 
-            'leaderName' : currentUser.name, 
-            'leaderId' : currentUser.id, 
-            'members' : projectMembersEl.value, 
-            'progress' : projectDescriptionEl.value, 
+            id: generateUniqueId("projectId"),
+            title: projectTitleEl.value,
+            description: projectDescriptionEl.value,
+            leaderName: currentUser.name,
+            leaderId: currentUser.id,
+            members: memberSelection.value,
+            status: "inProgress",
           }
           console.log(newProjectObj)
+
+          addProject(newProjectObj);
+          location.reload();
+
           document.body.removeChild(modal); // CLOSE WINDOWS
         }
       },
@@ -144,7 +160,6 @@ function showProjectDialog(){
     return x +=`<option value="${a.id}">${a.name} ${currentUserLabel}</option>`;
   } , "") ;
 
-
   const divContainer = document.createElement("div");
     divContainer.innerHTML = `
       <form class ="form" id="formProject">
@@ -155,11 +170,15 @@ function showProjectDialog(){
           </div>
           <div class="form__input-group">
               <label for="projectMembers">Project Members</label>
-              <select class="form__input" id="projectMembers" multiple autofocus>
-                ${membersHtml}
-              </select>
-              <div class="form__input-error-message"></div>
+              <div id="container" style="width:50%; font: 500 1rem 'Quicksand', sans-serif;">
+                <br>
+                <!--element which is going to render the MultiSelect-->
+                <input type="text" tabindex="1" id="select">
+                <div class="form__input-error-message"></div>
+              </div>
           </div>
+          
+          <!-- </div> -->
           <div class="form__input-group">
               <label for="projectDescription">Project Description</label>
               <textarea id="projectDescription" class="form__input" autofocus rows="4" cols="50"></textarea>  
@@ -168,7 +187,44 @@ function showProjectDialog(){
       </form>
     `;
 
-  showModal(title, divContainer.innerHTML, buttons)
+  showModal(title, divContainer.innerHTML, buttons);
+
+  var ele = document.getElementById('container');
+  if(ele) {
+      ele.style.visibility = "visible";
+  }
+
+  var data = [];
+  getAllUsers().forEach(user => {
+      const currentUserLabel = (user.id === currentUser.id) ? "(Me)" : "";
+      data.push( { name: user.name + currentUserLabel, id: user.id});
+  });
+
+  console.log(data);
+
+  // initialize MultiSelect component
+  var memberSelection = new ej.dropdowns.MultiSelect({
+    // set the members data to dataSource property
+    dataSource: data,
+    // map the appropriate columns to fields property
+    fields: { text: 'name', value: 'id' },
+
+    // adding a default selected value to add the user who is creating the project
+    value: [currentUser.id],
+    
+    // set the placeholder to MultiSelect input element
+    placeholder: 'Click to see list of members',
+    // set the type of mode for how to visualized the selected items in input element.
+    mode: 'Box',
+    // bind the tagging event
+    tagging: function (e) {
+        // set the current selected item text as class to chip element.
+        e.setClass(e.itemData[memberSelection.fields.text].toLowerCase());
+    }
+  });
+
+  // render initialized multiSelect
+  memberSelection.appendTo('#select');
 
 }
 
@@ -178,11 +234,12 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("createNewProject").addEventListener('click', showProjectDialog)
   document.getElementById("checkCurrentUsers").addEventListener('click', showUsersDialog)
 
+  // * uncomment this to generate dummy projects for testing purpose
   // generateDummyProjects().forEach( proj => {
   //   addProject(proj);
   // });
-
-  let projects = getAllProjects();
+  
+  let projects = getProjects(currentUser.id);
 
   projects.forEach(project => {
     let projectItem = document.createElement('li');
@@ -217,36 +274,16 @@ document.addEventListener("DOMContentLoaded", () => {
     location.href = "../index.html";
   });
 
-  // todo: commenting because this cause logout even when user refreshes page
+  // * commenting because this cause logout even when user refreshes page
   // window.addEventListener('beforeunload', function(e) {
   //       var e = e || window.event;
 
   //       if(e) {
-  //           // logout
   //           logoutCurrentUser();
   //       }
 
   //   }, false);
   //#endregion
-
-  // Code to show Modal
-  const buttons = [  {
-    label: "Got it!",
-    onClick: (modal) => {
-      console.log("The button was clicked!");
-    },
-    triggerClose: true
-  },
-  {
-    label: "Decline",
-    onClick: (modal) => {
-      console.log("DECLINED.");
-    },
-    triggerClose: true
-  }];
-
-  // todo: use this to show modal
-  // showModal('User edit', "<p>I am the content of this modal</p>", buttons)
 
 });
 

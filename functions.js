@@ -168,12 +168,16 @@ var getAllProjects = () => {
 
 var getProjects = (userId) => {
     var userProjects = [];
-    getAllProjects.forEach( project => {
+    getAllProjects().forEach( project => {
+        
+        console.log("userId: " + userId+ ", members: " + project.members + ", includes: " + project.members.includes(userId));
+        
         if(project.members.includes(userId)) {
             userProjects.push(project);
         }
-    })
+    });
 
+    console.log(userProjects);
     return userProjects;
 }
 

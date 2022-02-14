@@ -14,7 +14,7 @@ function showModal(titleHtml, contentHtml, buttons) {
               <div class="modal--bottom"></div>
           </div>
       `;
-    console.log(modal.innerHTML)
+    // console.log(modal.innerHTML)
     for (const button of buttons) {
       const element = document.createElement("button");
   
@@ -42,9 +42,6 @@ function showModal(titleHtml, contentHtml, buttons) {
   }
 
 // Form Input methods 
-
-
-
 function setInputError(inputElement, message) {
     inputElement.classList.add("form__input--error");
     inputElement.parentElement.querySelector(".form__input-error-message").textContent = message;

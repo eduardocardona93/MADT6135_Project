@@ -31,8 +31,6 @@ function insertNavBar(module = 'none'){
 
 }
 
-
-
 function validateProfileDialog(){
     let validForm = true;
     const profileUsernameEl = document.getElementById('profileUsername');
@@ -80,6 +78,7 @@ function validateProfileDialog(){
     }
     return validForm;
 }
+
 function showProfileDialog(){
     const title = 'Edit Profile'
     const divContainer = document.createElement("div");
