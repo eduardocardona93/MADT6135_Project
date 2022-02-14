@@ -183,3 +183,35 @@ var getProjects = (userId) => {
 
 //#endregion
 
+//#region Projects related functions
+
+var addTask = (task) => {
+    // fetching all projects
+    var tasks = getAllTasks();
+    // console.log("# of projects: " + projects.length);
+
+    tasks.push(task);
+    // console.log("Added project #" + project.id);
+
+    // Saving
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+};
+
+var getAllTasks = () => {
+    return JSON.parse(localStorage.getItem("tasks") || "[]");
+}
+
+var getProjectTasks = (projectId) => {
+    var projectTasks = [];
+    getAllTasks().forEach( task => {
+        if(task.projectId == projectId) {
+            projectTasks.push(task);
+        }
+    });
+
+    console.log(projectTasks);
+    return projectTasks;
+}
+
+//#endregion
+

@@ -16,9 +16,9 @@
     const projectId = urlSearchParams.get('id');
 
     let projects = [
-        {id:1, title:"Task #1", description: 'Order the boxes to deliver', startDate: "01/01/2022", endDate: "20/01/2022",  members: [1,2], status: 'inProgress'},
-        {id:2, title:"Task #2", description: 'create website', startDate: "15/01/2022", endDate: "25/01/2022",  members: [1,2], status: 'completed'},
-        {id:3, title:"Task #3", description: 'host the website online', startDate: "01/02/2022", endDate: "20/02/2022",  members: [1,2], status: 'inProgress'},
+        {id:1, projectId: 1, title:"Task #1", description: 'Order the boxes to deliver', startDate: "01/01/2022", endDate: "20/01/2022",  members: [1,2], status: 'inProgress'},
+        {id:2, projectId: 1, title:"Task #2", description: 'create website', startDate: "15/01/2022", endDate: "25/01/2022",  members: [1,2], status: 'completed'},
+        {id:3, projectId: 1, title:"Task #3", description: 'host the website online', startDate: "01/02/2022", endDate: "20/02/2022",  members: [1,2], status: 'inProgress'},
         ];
     
         let loggedMembers = [
