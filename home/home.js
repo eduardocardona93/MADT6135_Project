@@ -167,6 +167,7 @@ function showProjectDialog(){
           </div>
       </form>
     `;
+
   showModal(title, divContainer.innerHTML, buttons)
 
 }
@@ -177,9 +178,9 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("createNewProject").addEventListener('click', showProjectDialog)
   document.getElementById("checkCurrentUsers").addEventListener('click', showUsersDialog)
 
-  generateDummyProjects().forEach( proj => {
-    addProject(proj);
-  });
+  // generateDummyProjects().forEach( proj => {
+  //   addProject(proj);
+  // });
 
   let projects = getAllProjects();
 

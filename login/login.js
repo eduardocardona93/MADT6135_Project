@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if(validateSignupInfo(createAccountForm)) {
             var user = {
-                id: generateUniqueId(),
+                id: generateUniqueId("userId"),
                 name: signup_inputUname.value,
                 email: signup_inputEmail.value,
                 password: signup_inputPassword.value,
@@ -119,6 +119,13 @@ document.addEventListener("DOMContentLoaded", () => {
             
             addUser(user);
             saveCurrentUser(user);
+
+            // clearing the input fields
+            signup_inputUname.value = "";
+            signup_inputEmail.value = "";
+            signup_inputPassword.value = "";
+            signup_inputConfirmPassword.value = "";
+            signup_inputHourlyRate.value = "";
     
             // location.replace("/home/home.html");
             location.href = "/home/home.html";

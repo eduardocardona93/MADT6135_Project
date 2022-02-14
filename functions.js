@@ -153,10 +153,10 @@ var getLoggedInUser = () => {
 var addProject = (project) => {
     // fetching all projects
     var projects = getAllProjects();
-    console.log("# of projects: " + projects.length);
+    // console.log("# of projects: " + projects.length);
 
     projects.push(project);
-    console.log("Added project #" + project.id);
+    // console.log("Added project #" + project.id);
 
     // Saving
     localStorage.setItem("projects", JSON.stringify(projects));
