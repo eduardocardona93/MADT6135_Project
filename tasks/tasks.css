@@ -1,27 +1,26 @@
-body{
+body {
   margin: 0;
 }
 
-
 /*  Project list  */
-.projectContainer{
+.taskContainer {
   padding: 20px 16px;
-  
 }
 
-.projectContainer h2{
+.taskContainer h2 {
   margin-left: 1rem;
   margin-top: 1rem;
   padding-top: 0rem;
 }
 
-.projectManager {
-    padding-left: 1rem;
+.taskManager {
+  padding-left: 1rem;
 }
 
 .mem {
-    margin-left: 1rem;
+  margin-left: 1rem;
 }
+
 /* .listContainer {
   display: flex;
   flex-direction: row;
@@ -33,63 +32,80 @@ body{
   height: 100%;
 } */
 
-.projectList{
+.taskList {
   width: 100%;
   height: 100%;
 
   padding-left: 0;
 }
 
-.projectItem {
-list-style: none;
-display: inline-block;
-width: 28%;
+.taskItem {
+  list-style: none;
+  display: inline-block;
+  width: 28%;
 
-text-align: justify;
-margin: 8px 2%;
-padding: 5px;
-padding-top: 20px;
-border-radius: 5px;
+  text-align: start;
+  margin: 8px 2%;
+  padding: 5px;
+  padding-top: 20px;
+  border-radius: 5px;
 }
 
-.projectItem.inProgress{
-background-color: gray;
+.taskItem.inProgress {
+  background-color: gray;
 }
-.projectItem.completed{
-background-color: #00bb64;
+
+.taskItem.completed {
+  background-color: #00bb64;
 }
-.projectItem .title{
-font-size: 20px;
-color: #ffffff;
-padding-left: 0.7rem;
-font-style: oblique;
+
+.taskItem .title {
+  font-size: 20px;
+  color: #ffffff;
+  padding-left: 0.7rem;
+  /* font-style: oblique; */
 }
-.itemContent{
-margin-top: 10px;
-background-color: white;
-padding: 10px 10px 5px 10px;
+
+.taskDescription {
+  display: -webkit-box;/* or inline-block */
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow: hidden;
+  /* max-height: 1.2em;
+  line-height: 1.2em; */
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1; /* number of lines to show */
+
+}
+
+.itemContent {
+  margin-top: 10px;
+  background-color: white;
+  padding: 10px 10px 5px 10px;
 }
 
 .chip {
-display: inline-block;
-padding: 0 25px;
-height: 50px;
-font-size: 16px;
-line-height: 50px;
-border-radius: 25px;
-background-color: #f1f1f1;
-margin-right: 0.7rem;
+  display: inline-block;
+  padding: 0 25px;
+  height: 50px;
+  font-size: 16px;
+  line-height: 50px;
+  border-radius: 25px;
+  background-color: #f1f1f1;
+  margin-right: 0.7rem;
 }
 
 .closebtn {
-padding-left: 10px;
-color: #888;
-font-weight: bold;
-float: right;
-font-size: 20px;
-cursor: pointer;
+  padding-left: 10px;
+  color: #888;
+  font-weight: bold;
+  float: right;
+  font-size: 20px;
+  cursor: pointer;
 }
 
 .closebtn:hover {
-color: #000;
+  color: #000;
 }
+
+

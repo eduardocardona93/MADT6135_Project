@@ -248,10 +248,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     projectItem.setAttribute("data-project", JSON.stringify(project));
     projectItem.addEventListener("click", e => {
-      // todo: save current project and redirect to the task page
-      console.log(e.target.dataset.project);
-
-    })
+      // * redirect to the task page with project ID as URL param
+      var selectedProject = JSON.parse(e.target.dataset.project);
+      console.log(selectedProject.id);
+      location.href = "/tasks/tasks.html?id=" + selectedProject.id;
+    });
     
     let title = document.createElement('span');
     title.classList.add('title');
@@ -273,12 +274,6 @@ document.addEventListener("DOMContentLoaded", () => {
     projectItem.appendChild(itemContent);
 
     projectList.appendChild(projectItem)
-  });
-
-  document.getElementById("logOutBtn").addEventListener("click", () => {
-    console.log("logout called");
-    logoutCurrentUser();
-    location.href = "../index.html";
   });
 
   // * commenting because this cause logout even when user refreshes page

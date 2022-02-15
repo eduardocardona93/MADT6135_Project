@@ -28,6 +28,11 @@ function insertNavBar(module = 'none'){
     document.body.insertBefore(div, document.body.firstChild);
     
     document.getElementById("profileBtn").addEventListener('click', showProfileDialog)
+    document.getElementById("logOutBtn").addEventListener('click', e => {
+        console.log("logout called");
+        logoutCurrentUser();
+        location.href = "../index.html";
+    })
 
 }
 
