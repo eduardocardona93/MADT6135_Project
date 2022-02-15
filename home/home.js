@@ -245,6 +245,13 @@ document.addEventListener("DOMContentLoaded", () => {
     let projectItem = document.createElement('li');
     projectItem.classList.add('projectItem');
     projectItem.classList.add(project.status);
+
+    projectItem.setAttribute("data-project", JSON.stringify(project));
+    projectItem.addEventListener("click", e => {
+      // todo: save current project and redirect to the task page
+      console.log(e.target.dataset.project);
+
+    })
     
     let title = document.createElement('span');
     title.classList.add('title');
