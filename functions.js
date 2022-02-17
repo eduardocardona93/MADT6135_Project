@@ -203,7 +203,13 @@ var addTask = (task) => {
     // Saving
     localStorage.setItem("tasks", JSON.stringify(tasks));
 };
-
+var editTask = (task) => {
+    let tasks = getAllTasks();
+    const taskIndex = tasks.findIndex(x => x.id === task.id);
+    tasks[taskIndex] = task;
+    
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
 var getAllTasks = () => {
     return JSON.parse(localStorage.getItem("tasks") || "[]");
 }

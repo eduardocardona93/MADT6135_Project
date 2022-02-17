@@ -15,18 +15,7 @@
     
     const projectId = urlSearchParams.get('id');
 
-    let projects = [
-        {id:1,
-          projectId: 1,
-          title:"Task #1",
-         description: 'Order the boxes to deliver',
-         startDate: "01/01/2022",
-         endDate: "20/01/2022",
-          members: [1,2],
-         status: 'inProgress'},
-        {id:2, projectId: 1, title:"Task #2", description: 'create website', startDate: "15/01/2022", endDate: "25/01/2022",  members: [1,2], status: 'completed'},
-        {id:3, projectId: 1, title:"Task #3", description: 'host the website online', startDate: "01/02/2022", endDate: "20/02/2022",  members: [1,2], status: 'inProgress'},
-        ];
+    let tasks = getAllTasks();
     
         let loggedMembers = [
           {id:1, memberName:"member 1"},{id:1, memberName:"member 2"},
@@ -34,23 +23,35 @@
     
         let projectList = document.getElementById("taskList")
     
-        projects.forEach(project => {
+        tasks.forEach(task => {
             let projectItem = document.createElement('li');
             projectItem.classList.add('projectItem');
-            projectItem.classList.add(project.status);
+            projectItem.classList.add(task.status);
             
             let title = document.createElement('span');
             title.classList.add('title');
-            title.innerText = project.title;
+            title.innerText = task.title;
     
             let itemContent = document.createElement('div');
             itemContent.classList.add('itemContent');
     
             let p1 = document.createElement('p');
-            p1.innerHTML = "<p><b>Task description: </b><span>"+ project.description+"</span></p>"
-            
-          
+            p1.innerHTML = "<p><b>Task description: </b><span>"+ task.description+"</span></p>";
             itemContent.appendChild(p1);
+
+            let p3 = document.createElement('p');
+            p3.classList = "endBtn"
+            let editTaskBtn = document.createElement('button');
+            editTaskBtn.className = "btn-action editTaskBtn";
+            editTaskBtn.title = "Edit Project";
+            editTaskBtn.innerHTML = '<i class="fa fa-pen fa-lg"></i>';
+            editTaskBtn.addEventListener('click', ()=> {showTaskDialog(task);})
+
+            p3.appendChild(editTaskBtn);
+        
+            itemContent.appendChild(p3);
+          
+          
     
     
             projectItem.appendChild(title);
@@ -75,29 +76,12 @@
             })
             
         });
-        // const buttons = [  {
-        //     label: "Got it!",
-        //     onClick: (modal) => {
-        //       console.log("The button was clicked!");
-        //     },
-        //     triggerClose: true
-        //   },
-        //   {
-        //     label: "Decline",
-        //     onClick: (modal) => {
-        //       console.log("DECLINED.");
-        //     },
-        //     triggerClose: true
-        //   }]
-        // showModal('User edit', "<p>I am the content of this modal</p>", buttons)
-
         function validateTaskForm(){
           let validForm = true;
-          const tasksTitle = document.getElementById('tasksTitle').value;
-          const tasksDescription = document.getElementById('tasksDescription').value;
-          const tasksStartDate = document.getElementById('tasksStartDate').value;
-          const tasksEndDate = document.getElementById('tasksEndDate').value;
-          const tasksUser = document.getElementById('tasksUser').value;
+          const tasksTitle = document.getElementById('tasksTitle');
+          const tasksDescription = document.getElementById('tasksDescription');
+          const tasksStartDate = document.getElementById('tasksStartDate');
+          const tasksUser = document.getElementById('tasksUser');
           if(tasksTitle.value == ''){
             setInputError(tasksTitle,"Please enter a title");
             validForm = false;
@@ -122,14 +106,6 @@
             setInputSuccess(tasksStartDate);
           }
 
-          if(tasksEndDate.value == ''){
-            setInputError(tasksEndDate,"Please enter an end date");
-            validForm = false;
-          }else{
-            clearInputError(tasksEndDate);
-            setInputSuccess(tasksEndDate);
-          }
-
           if(tasksUser.value == ''){
             setInputError(tasksUser,"Please enter an user");
             validForm = false;
@@ -139,7 +115,7 @@
           }
           return validForm;
         }
-        function showTaskDialog(taskDataObject = null){
+        function showTaskDialog(taskDataObject = null) {
           const title = taskDataObject ? 'Edit Task' : 'Create New Task';
           const buttons = [  
             { // SAVE BUTTON
@@ -147,21 +123,23 @@
               onClick: (modal) => {
                 if(validateTaskForm()){
                   let taskObj = {
-                    id:1,
+                    id:generateUniqueId("taskId"),
                     projectId: projectId,
                     title:document.getElementById('tasksTitle').value,
                     description:document.getElementById('tasksDescription').value,
                     startDate: document.getElementById('tasksStartDate').value,
-                    endDate: document.getElementById('tasksEndDate').value,
+                    endDate: document.getElementById('tasksEndDate').value  || '',
                     members: document.getElementById('tasksUser').value,
                     status: 'inProgress'
                   }
                   if(document.getElementById('taskIdHidden').value){
-                    
+                    taskObj.id = document.getElementById('taskIdHidden').value;
+                    editTask(taskObj);
                   }else{
-                    
+                    addTask(taskObj);
                   }
                   document.body.removeChild(modal); // CLOSE WINDOWS
+                  location.reload();
                 }
               },
               triggerClose: false
@@ -197,7 +175,7 @@
                   </div>
                   <div class="form__input-group">
                       <label for="tasksEndDate">Task End Date</label>
-                       <input type="date" id="tasksTitle" class="form__input" autofocus >
+                       <input type="date" id="tasksEndDate" class="form__input" autofocus >
                       <div class="form__input-error-message"></div>
                   </div>
                   <input type="hidden" id="taskIdHidden">
@@ -210,7 +188,15 @@
             `;
     
           showModal(title, divContainer.innerHTML, buttons);
-
+          if(taskDataObject !== null){
+            console.log(taskDataObject)
+            document.getElementById('tasksTitle').value = taskDataObject.title;
+            document.getElementById('tasksDescription').value = taskDataObject.description;
+            document.getElementById('tasksStartDate').value =taskDataObject.startDate;
+            document.getElementById('tasksEndDate').value = taskDataObject.endDate;
+            document.getElementById('tasksUser').value = taskDataObject.members;
+            document.getElementById('taskIdHidden').value = taskDataObject.id;
+          }
 
         }
         
