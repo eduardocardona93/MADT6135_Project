@@ -162,6 +162,13 @@ var addProject = (project) => {
     localStorage.setItem("projects", JSON.stringify(projects));
 };
 
+var editProject = (project) => {
+    let projects = getAllProjects();
+    const projectIndex = projects.findIndex(x => x.id === project.id);
+    projects[projectIndex] = project;
+    localStorage.setItem("projects", JSON.stringify(projects));
+}
+
 var getAllProjects = () => {
     return JSON.parse(localStorage.getItem("projects") || "[]");
 }

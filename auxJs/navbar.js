@@ -11,11 +11,15 @@ function insertNavBar(module = 'none'){
         'tasks': '',
         'none': '',
     }
+    const homeHref = {
+        'projects' :  `./home.html`,
+        'tasks': '../home/home.html',
+        'none': '#',
+    }
 
     div.innerHTML = `
         <div class="actions">
-            <a class="home-title"  href="#">PJ Manager Pro</a>
-            <button id="" class="menu-actions" title="Check current progress"  ><i class="fa fa-list-check fa-lg"></i></i></button>
+            <a class="home-title"  href="${homeHref[module] }">PJ Manager Pro</a>
             ${modules[module] }
         </div>
         
@@ -61,19 +65,23 @@ function validateProfileDialog(){
         setInputSuccess(profileHourlyRateEl);
     }
     if(profilePassCheck.checked){
-        if (profilePassword.value == "" ) {
-            setInputError(profilePassword,"Please enter a description")
+        
+        if (!profilePassword.value.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#_])[A-Za-z\d@$!%*?&#_]{8,}$/) ) {
+            setInputError(profilePassword,"Password must have at least 8 characters, one capital letter,lower case letter, a number and a special character (@, $, !, %, *, ?, &, #, _)")
             validForm = false;
         }else{
             clearInputError(profilePassword);
             setInputSuccess(profilePassword);
         }
-        if (profileConfirmPassword.value == "" ) {
-            setInputError(profileConfirmPassword,"Please enter a description")
+        if (!profileConfirmPassword.value.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#_])[A-Za-z\d@$!%*?&#_]{8,}$/) ) {
+            setInputError(profileConfirmPassword,"Password must have at least 8 characters, one capital letter,lower case letter, a number and a special character (@, $, !, %, *, ?, &, #, _)")
             validForm = false;
         }else{
             clearInputError(profileConfirmPassword);
             setInputSuccess(profileConfirmPassword);
+        }
+        if(profilePassword.value !== profileConfirmPassword.value){
+            validForm = false;
         }
     }
     return validForm;
