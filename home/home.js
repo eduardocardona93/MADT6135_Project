@@ -88,7 +88,7 @@ function showUsersDialog(){
 
 function showProjectDialog(projectDataObject = null){
   const title = projectDataObject ? 'Edit Project' : 'Create New Project';
-  
+  let selectedMembers = []
 
   // MODAL BUTTONS
   const buttons = [  
@@ -189,8 +189,8 @@ function showProjectDialog(projectDataObject = null){
   showModal(title, divContainer.innerHTML, buttons);
   if (projectDataObject !== null) {
     document.getElementById('projectTitle').value = projectDataObject.title;
-    // document.getElementById('container').value = projectDataObject.description;
-    document.getElementById('projectDescription').value = projectDataObject.members;
+    selectedMembers = projectDataObject.members;
+    document.getElementById('projectDescription').value = projectDataObject.description;
     document.getElementById('projectIdHidden').value = projectDataObject.id ;
   }
   var ele = document.getElementById('container');
@@ -212,7 +212,7 @@ function showProjectDialog(projectDataObject = null){
     fields: { text: 'name', value: 'id' },
 
     // adding a default selected value to add the user who is creating the project
-    value: [currentUser.id],
+    value: selectedMembers,
     
     // set the placeholder to MultiSelect input element
     placeholder: 'Click to see list of members',
