@@ -17,9 +17,6 @@
 
     let tasks = getAllTasks();
     
-        let loggedMembers = [
-          {id:1, memberName:"member 1"},{id:1, memberName:"member 2"},
-        ]
     
         let projectList = document.getElementById("taskList")
     
@@ -39,6 +36,14 @@
             p1.innerHTML = "<p><b>Task description: </b><span>"+ task.description+"</span></p>";
             itemContent.appendChild(p1);
 
+            let memberAsgnd = document.createElement('p');
+            memberAsgnd.innerHTML = "<p><b>Member Asigned:</b>" + task.id+ "</p>";
+            itemContent.appendChild(memberAsgnd);
+
+            let deadLine = document.createElement('p');
+            deadLine.innerHTML = "<p><b>Start date and deadline: </b><br>"+task.startDate + "<b> to </b>" +task.endDate+"</p>";
+            itemContent.appendChild(deadLine);
+
             let p3 = document.createElement('p');
             p3.classList = "endBtn"
             let editTaskBtn = document.createElement('button');
@@ -47,35 +52,32 @@
             editTaskBtn.innerHTML = '<i class="fa fa-pen fa-lg"></i>';
             editTaskBtn.addEventListener('click', ()=> {showTaskDialog(task);})
 
+            let completeTaskBtn = document.createElement('button');
+            completeTaskBtn.className = "btn-action completeTaskBtn";
+            completeTaskBtn.title = "Complete";
+            completeTaskBtn.innerHTML = '<i class="fa fa-solid fa-circle-check fa-lg"></i>'
+            completeTaskBtn.addEventListener('click', ()=> {completedTask(task);})
+
+            p3.appendChild(completeTaskBtn);
             p3.appendChild(editTaskBtn);
         
             itemContent.appendChild(p3);
           
-          
-    
     
             projectItem.appendChild(title);
             projectItem.appendChild(itemContent);
     
             projectList.appendChild(projectItem);
-    
-            loggedMembers.forEach(loggedMember => {
-              let memberItem = document.createElement('li');
-              memberItem.classList.add('memberItem');
-              memberItem.classList.add(loggedMember.loggedMembers);
-    
-              let memberTasked = document.createElement('div');
-              memberTasked.classList.add('chip');
-              itemContent.appendChild(memberTasked);
-    
-              let memberTaskedname = document.createElement('span');
-              //memberTaskedname.classList.add('memberName');//
-              memberTaskedname.innerText = loggedMember.memberName;
-    
-              memberItem.appendChild(memberTaskedname);
-            })
+     
             
         });
+
+        function completedTask(){
+          let taskObj = { 
+            status: 'completed'
+          }
+        }
+
         function validateTaskForm(){
           let validForm = true;
           const tasksTitle = document.getElementById('tasksTitle');
@@ -115,6 +117,7 @@
           }
           return validForm;
         }
+
         function showTaskDialog(taskDataObject = null) {
           const title = taskDataObject ? 'Edit Task' : 'Create New Task';
           const buttons = [  
