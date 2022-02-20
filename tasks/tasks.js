@@ -1,94 +1,213 @@
-(function () {
-  "use strict";
+(function() {
+    'use strict'
 
-  var loggedInUser = getLoggedInUser();
-  if (loggedInUser == null || loggedInUser == "") {
-    console.log("logging out");
-    location.href = "../index.html";
-  } else {
-    insertNavBar("tasks");
-  }
+    var loggedInUser = getLoggedInUser();
+    if(loggedInUser == null || loggedInUser == "") {
+      console.log("logging out");
+      location.href = "../index.html";
+    }
+    else {
+      insertNavBar('tasks');
 
-  const urlSearchParams = new URLSearchParams(window.location.search);
+    }
 
-  const projectId = urlSearchParams.get("id");
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    
+    const projectId = urlSearchParams.get('id');
 
-  let dummyTasks = [
-    {
-      id: 1,
-      projectId: 1,
-      title: "Task #1",
-      description: "Order the boxes to deliver",
-      startDate: "01/01/2022",
-      endDate: "20/01/2022",
-      memberId: 1,
-      memberName: "Keval",
-      hours: 30,
-      status: "inProgress",
-    },
-    {
-      id: 2,
-      projectId: 1,
-      title: "Task #2",
-      description: "create website ",
-      startDate: "15/01/2022",
-      endDate: "25/01/2022",
-      memberId: 2,
-      memberName: "Lino",
-      hours: 30,
-      status: "completed",
-    },
-    {
-      id: 3,
-      projectId: 1,
-      title: "Task #3",
-      description: "host the website online",
-      startDate: "01/02/2022",
-      endDate: "20/02/2022",
-      hours: 30,
-      memberId: 3,
-      memberName: "Eduardo",
-      status: "inProgress",
-    },
-  ];
+    let tasks = getAllTasks();
+    
+    
+        let projectList = document.getElementById("taskList")
+    
+        tasks.forEach(task => {
+            let taskItem = document.createElement('li');
+            taskItem.classList.add('taskItem');
+            taskItem.classList.add(task.status);
+            
+            let title = document.createElement('span');
+            title.classList.add('title');
+            title.innerText = task.title;
+    
+            let itemContent = document.createElement('div');
+            itemContent.classList.add('itemContent');
+    
+            let p1 = document.createElement('p');
+            p1.innerHTML = "<p><b>Task description: </b><span>"+ task.description+"</span></p>";
+            itemContent.appendChild(p1);
 
-  dummyTasks.forEach(task => {
-    addTask(task);
-  });
+            let memberAsgnd = document.createElement('p');
+            memberAsgnd.innerHTML = "<p><b>Member Asigned:</b>" + task.id+ "</p>";
+            itemContent.appendChild(memberAsgnd);
 
-  var tasks = getProjectTasks(projectId);
+            let deadLine = document.createElement('p');
+            deadLine.innerHTML = "<p><b>Start date and deadline: </b><br>"+task.startDate + "<b> to </b>" +task.endDate+"</p>";
+            itemContent.appendChild(deadLine);
 
-  let taskList = document.getElementById("taskList");
+            let p3 = document.createElement('p');
+            p3.classList = "endBtn"
+            let editTaskBtn = document.createElement('button');
+            editTaskBtn.className = "btn-action editTaskBtn";
+            editTaskBtn.title = "Edit Project";
+            editTaskBtn.innerHTML = '<i class="fa fa-pen fa-lg"></i>';
+            editTaskBtn.addEventListener('click', ()=> {showTaskDialog(task);})
 
-  tasks.forEach((task) => {
-    let taskItem = document.createElement("li");
-    taskItem.classList.add("taskItem");
-    taskItem.classList.add(task.status);
+            let completeTaskBtn = document.createElement('button');
+            completeTaskBtn.className = "btn-action completeTaskBtn";
+            completeTaskBtn.title = "Complete";
+            completeTaskBtn.innerHTML = '<i class="fa fa-solid fa-circle-check fa-lg"></i>'
+            completeTaskBtn.addEventListener('click', ()=> {completedTask(task);})
 
-    let title = document.createElement("span");
-    title.classList.add("title");
-    title.innerText = task.title;
+            p3.appendChild(completeTaskBtn);
+            p3.appendChild(editTaskBtn);
+        
+            itemContent.appendChild(p3);
+          
+    
+            taskItem.appendChild(title);
+            taskItem.appendChild(itemContent);
+    
+            projectList.appendChild(taskItem);
+     
+            
+        });
 
-    let itemContent = document.createElement("div");
-    itemContent.classList.add("itemContent");
+        function completedTask(){
+          let taskObj = { 
+            status: 'completed'
+          }
+        }
 
-    let p1 = document.createElement("p");
-    p1.classList.add("taskDescription");
-    p1.innerHTML =
-      "<b>Description: </b><span>" + task.description + "</span>";
+        function validateTaskForm(){
+          let validForm = true;
+          const tasksTitle = document.getElementById('tasksTitle');
+          const tasksDescription = document.getElementById('tasksDescription');
+          const tasksStartDate = document.getElementById('tasksStartDate');
+          const tasksUser = document.getElementById('tasksUser');
+          if(tasksTitle.value == ''){
+            setInputError(tasksTitle,"Please enter a title");
+            validForm = false;
+          }else{
+            clearInputError(tasksTitle);
+            setInputSuccess(tasksTitle);
+          }
 
-    let p2 = document.createElement("p");
-    p2.classList.add("assignedMember");
-    p2.innerHTML = "<p><b>Member: </b><span>" + task.memberName + "</span></p>";
+          if(tasksDescription.value == ''){
+            setInputError(tasksDescription,"Please enter a description");
+            validForm = false;
+          }else{
+            clearInputError(tasksDescription);
+            setInputSuccess(tasksDescription);
+          }
 
-    itemContent.appendChild(p1);
-    itemContent.appendChild(p2);
+          if(tasksStartDate.value == ''){
+            setInputError(tasksStartDate,"Please enter a start date");
+            validForm = false;
+          }else{
+            clearInputError(tasksStartDate);
+            setInputSuccess(tasksStartDate);
+          }
 
-    taskItem.appendChild(title);
-    taskItem.appendChild(itemContent);
+          if(tasksUser.value == ''){
+            setInputError(tasksUser,"Please enter an user");
+            validForm = false;
+          }else{
+            clearInputError(tasksUser);
+            setInputSuccess(tasksUser);
+          }
+          return validForm;
+        }
 
-    taskList.appendChild(taskItem);
+        function showTaskDialog(taskDataObject = null) {
+          const title = taskDataObject ? 'Edit Task' : 'Create New Task';
+          const buttons = [  
+            { // SAVE BUTTON
+              label: "Save Task",
+              onClick: (modal) => {
+                if(validateTaskForm()){
+                  let taskObj = {
+                    id:generateUniqueId("taskId"),
+                    projectId: projectId,
+                    title:document.getElementById('tasksTitle').value,
+                    description:document.getElementById('tasksDescription').value,
+                    startDate: document.getElementById('tasksStartDate').value,
+                    endDate: document.getElementById('tasksEndDate').value  || '',
+                    members: document.getElementById('tasksUser').value,
+                    status: 'inProgress'
+                  }
+                  if(document.getElementById('taskIdHidden').value){
+                    taskObj.id = document.getElementById('taskIdHidden').value;
+                    editTask(taskObj);
+                  }else{
+                    addTask(taskObj);
+                  }
+                  document.body.removeChild(modal); // CLOSE WINDOWS
+                  location.reload();
+                }
+              },
+              triggerClose: false
+            },
+            { // CLOSE WINDOWS
+              label: "Close",
+              type: 'close',
+              onClick: (modal) => {},
+              triggerClose: true
+            }
+          ];
+          var dataUserListObject = '';
+          getAllUsers().forEach(user => {
+              dataUserListObject += ` <option value="${user.id}">${user.name}</option>`;
+          });
+          const divContainer = document.createElement("div");
+          divContainer.innerHTML = `
+              <form class ="form" id="formTask">
+                  <div class="form__input-group">
+                      <label for="tasksTitle">Task Title</label>
+                      <input type="text" id="tasksTitle" class="form__input" autofocus >
+                      <div class="form__input-error-message"></div>
+                  </div>
+                  <div class="form__input-group">
+                      <label for="tasksDescription">Task Description</label>
+                      <textarea id="tasksDescription" class="form__input" autofocus rows="4" cols="50"></textarea>  
+                      <div class="form__input-error-message"></div>
+                  </div>
+                  <div class="form__input-group">
+                      <label for="tasksStartDate">Task Start Date</label>
+                       <input type="date" id="tasksStartDate" class="form__input" autofocus >
+                      <div class="form__input-error-message"></div>
+                  </div>
+                  <div class="form__input-group">
+                      <label for="tasksEndDate">Task End Date</label>
+                       <input type="date" id="tasksEndDate" class="form__input" autofocus >
+                      <div class="form__input-error-message"></div>
+                  </div>
+                  <input type="hidden" id="taskIdHidden">
+                  <div class="form__input-group">
+                      <label for="tasksUser">Task Assigned User</label>
+                      <select class="form__input" id="tasksUser">${dataUserListObject}</select>
+                      <div class="form__input-error-message"></div>
+                  </div>
+              </form>
+            `;
+    
+          showModal(title, divContainer.innerHTML, buttons);
+          if(taskDataObject !== null){
+            console.log(taskDataObject)
+            document.getElementById('tasksTitle').value = taskDataObject.title;
+            document.getElementById('tasksDescription').value = taskDataObject.description;
+            document.getElementById('tasksStartDate').value =taskDataObject.startDate;
+            document.getElementById('tasksEndDate').value = taskDataObject.endDate;
+            document.getElementById('tasksUser').value = taskDataObject.members;
+            document.getElementById('taskIdHidden').value = taskDataObject.id;
+          }
 
-  });
+        }
+        
 
-})();
+        document.addEventListener("DOMContentLoaded", () => {
+
+          document.getElementById("createNewTask").addEventListener('click', () => {showTaskDialog()})
+        })
+}())
+
+

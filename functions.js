@@ -162,6 +162,13 @@ var addProject = (project) => {
     localStorage.setItem("projects", JSON.stringify(projects));
 };
 
+var editProject = (project) => {
+    let projects = getAllProjects();
+    const projectIndex = projects.findIndex(x => x.id === project.id);
+    projects[projectIndex] = project;
+    localStorage.setItem("projects", JSON.stringify(projects));
+}
+
 var getAllProjects = () => {
     return JSON.parse(localStorage.getItem("projects") || "[]");
 }
@@ -196,7 +203,13 @@ var addTask = (task) => {
     // Saving
     localStorage.setItem("tasks", JSON.stringify(tasks));
 };
-
+var editTask = (task) => {
+    let tasks = getAllTasks();
+    const taskIndex = tasks.findIndex(x => x.id === task.id);
+    tasks[taskIndex] = task;
+    
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
 var getAllTasks = () => {
     return JSON.parse(localStorage.getItem("tasks") || "[]");
 }

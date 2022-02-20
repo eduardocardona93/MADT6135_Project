@@ -5,7 +5,6 @@ var loggedInUser = getLoggedInUser();
 (function() {
   // loggedInUser = getLoggedInUser();
   if(loggedInUser == null || loggedInUser == "") {
-    console.log("logging out");
     location.href = "../index.html";
   }
   else {
@@ -87,8 +86,9 @@ function showUsersDialog(){
   
 }
 
-function showProjectDialog(){
-  const title = 'Create New Project'
+function showProjectDialog(projectDataObject = null){
+  const title = projectDataObject ? 'Edit Project' : 'Create New Project';
+  let selectedMembers = []
 
   // MODAL BUTTONS
   const buttons = [  
@@ -108,7 +108,6 @@ function showProjectDialog(){
           setInputSuccess(projectTitleEl);
         }
 
-        console.log(memberSelection.value);
         if(memberSelection.value.length == 0) {
           setInputError(projectMembersEl, "Please select at least one member");
         }
@@ -124,10 +123,9 @@ function showProjectDialog(){
           setInputSuccess(projectDescriptionEl);
         }
 
-        console.log(loggedInUser);
         // SAVE THE FORM
         if(projectTitleEl.value !== "" && memberSelection.value.length > 0 && projectDescriptionEl.value !== ""){
-          const newProjectObj = {
+          let projectObj = {
             id: generateUniqueId("projectId"),
             title: projectTitleEl.value,
             description: projectDescriptionEl.value,
@@ -136,12 +134,17 @@ function showProjectDialog(){
             members: memberSelection.value,
             status: "inProgress",
           }
-          console.log(newProjectObj)
+          if(document.getElementById('projectIdHidden').value ){
+            projectObj.id = document.getElementById('projectIdHidden').value;
+            editProject(projectObj);
+          }else{
+            addProject(projectObj);
+          }
 
-          addProject(newProjectObj);
-          location.reload();
-
+         
           document.body.removeChild(modal); // CLOSE WINDOWS
+
+          location.reload();
         }
       },
       triggerClose: false
@@ -155,10 +158,6 @@ function showProjectDialog(){
   ]
 
   // GET ALL USERS BUT THE CURRENT USER
-  let membersHtml = getAllUsers().reduce( (x,a) => {
-    const currentUserLabel = (a.id === currentUser.id) ?  "(Me)" : "";
-    return x +=`<option value="${a.id}">${a.name} ${currentUserLabel}</option>`;
-  } , "") ;
 
   const divContainer = document.createElement("div");
     divContainer.innerHTML = `
@@ -177,8 +176,8 @@ function showProjectDialog(){
                 <div class="form__input-error-message"></div>
               </div>
           </div>
-          
-          <!-- </div> -->
+          <input type="hidden" id="projectIdHidden">
+
           <div class="form__input-group">
               <label for="projectDescription">Project Description</label>
               <textarea id="projectDescription" class="form__input" autofocus rows="4" cols="50"></textarea>  
@@ -188,29 +187,32 @@ function showProjectDialog(){
     `;
 
   showModal(title, divContainer.innerHTML, buttons);
-
+  if (projectDataObject !== null) {
+    document.getElementById('projectTitle').value = projectDataObject.title;
+    selectedMembers = projectDataObject.members;
+    document.getElementById('projectDescription').value = projectDataObject.description;
+    document.getElementById('projectIdHidden').value = projectDataObject.id ;
+  }
   var ele = document.getElementById('container');
   if(ele) {
       ele.style.visibility = "visible";
   }
 
-  var data = [];
+  var dataUserListObject = [];
   getAllUsers().forEach(user => {
-      const currentUserLabel = (user.id === currentUser.id) ? "(Me)" : "";
-      data.push( { name: user.name + currentUserLabel, id: user.id});
+      dataUserListObject.push( { name: user.name , id: user.id});
   });
 
-  console.log(data);
 
   // initialize MultiSelect component
   var memberSelection = new ej.dropdowns.MultiSelect({
     // set the members data to dataSource property
-    dataSource: data,
+    dataSource: dataUserListObject,
     // map the appropriate columns to fields property
     fields: { text: 'name', value: 'id' },
 
     // adding a default selected value to add the user who is creating the project
-    value: [currentUser.id],
+    value: selectedMembers,
     
     // set the placeholder to MultiSelect input element
     placeholder: 'Click to see list of members',
@@ -219,7 +221,7 @@ function showProjectDialog(){
     // bind the tagging event
     tagging: function (e) {
         // set the current selected item text as class to chip element.
-        e.setClass(e.itemData[memberSelection.fields.text].toLowerCase());
+        e.setClass(e.itemData[memberSelection.fields.text].toLowerCase().replace(' ', '_'));
     }
   });
 
@@ -231,7 +233,7 @@ function showProjectDialog(){
 // start execution when Content Loaded
 document.addEventListener("DOMContentLoaded", () => {
 
-  document.getElementById("createNewProject").addEventListener('click', showProjectDialog)
+  document.getElementById("createNewProject").addEventListener('click', () => {showProjectDialog()})
   document.getElementById("checkCurrentUsers").addEventListener('click', showUsersDialog)
 
   // * uncomment this to generate dummy projects for testing purpose
@@ -247,12 +249,6 @@ document.addEventListener("DOMContentLoaded", () => {
     projectItem.classList.add(project.status);
 
     projectItem.setAttribute("data-project", JSON.stringify(project));
-    projectItem.addEventListener("click", e => {
-      // * redirect to the task page with project ID as URL param
-      var selectedProject = JSON.parse(e.target.dataset.project);
-      console.log(selectedProject.id);
-      location.href = "/tasks/tasks.html?id=" + selectedProject.id;
-    });
     
     let title = document.createElement('span');
     title.classList.add('title');
@@ -262,14 +258,30 @@ document.addEventListener("DOMContentLoaded", () => {
     itemContent.classList.add('itemContent');
 
     let p1 = document.createElement('p');
-    p1.innerHTML = "<p><b>Manager: </b><span>"+ project.leaderName+"</span></p>"
-
-    let p2 = document.createElement('p');
-    p2.innerHTML = "<p><b>Team members: </b><span>"+ project.members.length+"</span></p>"
-
+    p1.innerHTML = "<b>Manager: </b><span>"+ project.leaderName+"</span>"
     itemContent.appendChild(p1);
+    
+    let p2 = document.createElement('p');
+    p2.innerHTML = "<b>Team members: </b><span>"+ project.members.length+"</span>";
     itemContent.appendChild(p2);
 
+    let p3 = document.createElement('p');
+    p3.classList = "endBtn"
+
+    let editProjectBtn = document.createElement('button');
+    editProjectBtn.className = "btn-action editProjectBtn";
+    editProjectBtn.title = "Edit Project";
+    editProjectBtn.innerHTML = '<i class="fa fa-pen fa-lg"></i>';
+    editProjectBtn.addEventListener('click', ()=> {showProjectDialog(project);})
+    let goToTasksBtn = document.createElement('button');
+    goToTasksBtn.className = "btn-action blue goToTasksBtn";
+    goToTasksBtn.title = "Project Tasks";
+    goToTasksBtn.innerHTML = '<i class="fa fa-list-check fa-lg"></i>';
+    goToTasksBtn.addEventListener('click', ()=> {location.href = "../tasks/tasks.html?id="+project.id;;})
+    p3.appendChild(editProjectBtn);
+    p3.appendChild(goToTasksBtn);
+
+    itemContent.appendChild(p3);
     projectItem.appendChild(title);
     projectItem.appendChild(itemContent);
 

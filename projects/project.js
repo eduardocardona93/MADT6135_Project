@@ -14,18 +14,6 @@
 
     console.log(data);
 
-    // var data = [
-    //     { name: 'Chocolate', id: '#75523C' },
-    //     { name: 'CadetBlue', id: '#3B8289' },
-    //     { name: 'DarkOrange', id: '#FF843D' },
-    //     { name: 'DarkRed', id: '#CA3832' },
-    //     { name: 'Fuchsia', id: '#D44FA3' },
-    //     { name: 'HotPink', id: '#F23F82' },
-    //     { name: 'Indigo', id: '#2F5D81' },
-    //     { name: 'LimeGreen', id: '#4CD242' },
-    //     { name: 'OrangeRed', id: '#FE2A00' },
-    //     { name: 'Tomato', id: '#FF745C' }
-	// 	];
 
     // initialize MultiSelect component
     var amember = new ej.dropdowns.MultiSelect({

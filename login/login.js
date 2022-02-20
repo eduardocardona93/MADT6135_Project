@@ -69,6 +69,15 @@ function validateSignupInfo(signupForm) {
         return false;
     }
 
+    if(!signup_inputPassword.value.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#_])[A-Za-z\d@$!%*?&#_]{8,}$/)) {
+        setFormMessage(signupForm, "error", "Password must have at least 8 characters, one capital letter,lower case letter, a number and a special character (@, $, !, %, *, ?, &, #, _)");
+        return false;
+    }
+    if(!signup_inputConfirmPassword.value.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#_])[A-Za-z\d@$!%*?&#_]{8,}$/)) {
+        setFormMessage(signupForm, "error", "Confirm password must have at least 8 characters, one capital letter,lower case letter, a number and a special character (@, $, !, %, *, ?, &, #, _)");
+        return false;
+    }
+
     if(signup_inputPassword.value != signup_inputConfirmPassword.value) {
         setFormMessage(signupForm, "error", "Passwords doesn't match!");
         return false;
