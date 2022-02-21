@@ -81,12 +81,12 @@
 
 
   .collapsible {
-    background-color: #777;
-    color: white;
+    background-color: rgb(197, 196, 196);
+    background-color: white;
+    border: 1px solid #555;
     cursor: pointer;
     padding: 18px;
     width: 100%;
-    border: none;
     text-align: left;
     outline: none;
     font-size: 15px;
@@ -94,12 +94,32 @@
   
   .active, .collapsible:hover {
     background-color: #555;
+    color: white;
+
   }
 
   .content {
     padding: 0 18px;
     background-color: white;
+    border: 1px solid #555;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.2s ease-out;
   }
+
+  
+
+.content.inProgress,.collapsible.inProgress{
+  border: 1px solid gray;
+}
+.collapsible.inProgress:hover {
+  background-color: gray;
+  color: white;
+}
+.content.completed,.collapsible.completed{
+  border: 1px solid #00bb64;
+}
+.collapsible.completed:hover {
+  background-color: #00bb64;
+  color: white;
+}

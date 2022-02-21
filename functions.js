@@ -87,7 +87,7 @@ var getCurrentUser = () => {
 
 var updateUser = (user) => {
     let users = getAllUsers();
-    const userIndex = users.findIndex(x => x.id === user.id);
+    const userIndex = users.findIndex(x => x.id == user.id);
     users[userIndex] = user;
     localStorage.setItem("users", JSON.stringify(users));
 }
@@ -108,6 +108,12 @@ var addUser = (user) => {
     // Saving
     localStorage.setItem("users", JSON.stringify(users));
 };
+
+var getUser = (userId) => {
+
+    return getAllUsers().find((user) => userId == user.id)
+
+}
 
 var validateEmail = (email) => {
     var regex = /^\S+@\S+\.\S+$/;
@@ -195,7 +201,7 @@ var addProject = (project) => {
 
 var editProject = (project) => {
     let projects = getAllProjects();
-    const projectIndex = projects.findIndex(x => x.id === project.id);
+    const projectIndex = projects.findIndex(x => x.id == project.id);
     projects[projectIndex] = project;
     localStorage.setItem("projects", JSON.stringify(projects));
 }
@@ -203,6 +209,13 @@ var editProject = (project) => {
 var getAllProjects = () => {
     return JSON.parse(localStorage.getItem("projects") || "[]");
 }
+
+var getProject = (projectId) => {
+
+    return getAllProjects().find((project) => projectId == project.id);
+
+}
+
 
 var getProjects = (userId) => {
     var userProjects = [];
@@ -237,7 +250,6 @@ var addTask = (task) => {
 var editTask = (task) => {
     let tasks = getAllTasks();
     const taskIndex = tasks.findIndex(x => x.id == task.id);
-    console.log("index: " + taskIndex);
     tasks[taskIndex] = task;
     
     localStorage.setItem("tasks", JSON.stringify(tasks));

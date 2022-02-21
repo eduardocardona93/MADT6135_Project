@@ -12,6 +12,7 @@
 
     const urlSearchParams = new URLSearchParams(window.location.search);
     const projectId = urlSearchParams.get('id');
+    const projectObj = getProject(projectId);
 
     let tasks = getProjectTasks(projectId);    // getAllTasks();
     var projectUsers = getProjectUsers(projectId);
@@ -21,6 +22,7 @@
     
         // generate UI for showing all the tasks
         tasks.forEach(task => {
+          console.log(task)
             let taskItem = document.createElement('li');
             taskItem.classList.add('taskItem');
             taskItem.classList.add(task.status);
@@ -37,7 +39,7 @@
             itemContent.appendChild(p1);
 
             let memberAsgnd = document.createElement('p');
-            memberAsgnd.innerHTML = "<p><b>Member Asigned: </b>" + projectUsers[projectUsers.findIndex(x => x.id == task.members)].name + "</p>";
+            memberAsgnd.innerHTML = "<p><b>Member Asigned:</b>" + task.memberName+ "</p>";
             itemContent.appendChild(memberAsgnd);
 
             let deadLine = document.createElement('p');
@@ -48,7 +50,7 @@
             p3.classList = "endBtn"
             let editTaskBtn = document.createElement('button');
             editTaskBtn.className = "btn-action editTaskBtn";
-            editTaskBtn.title = "Edit Task";
+            editTaskBtn.title = "Edit task";
             editTaskBtn.innerHTML = '<i class="fa fa-pen fa-lg"></i>';
             editTaskBtn.addEventListener('click', ()=> {showTaskDialog(task);})
 
@@ -78,6 +80,7 @@
           const tasksTitle = document.getElementById('tasksTitle');
           const tasksDescription = document.getElementById('tasksDescription');
           const tasksStartDate = document.getElementById('tasksStartDate');
+          const tasksEndDate = document.getElementById('tasksEndDate');
           const tasksUser = document.getElementById('tasksUser');
           if(tasksTitle.value == ''){
             setInputError(tasksTitle,"Please enter a title");
@@ -102,7 +105,13 @@
             clearInputError(tasksStartDate);
             setInputSuccess(tasksStartDate);
           }
-
+          if(tasksEndDate.value == ''){
+            setInputError(tasksEndDate,"Please enter an end date");
+            validForm = false;
+          }else{
+            clearInputError(tasksEndDate);
+            setInputSuccess(tasksEndDate);
+          }
           if(tasksUser.value == ''){
             setInputError(tasksUser,"Please enter an user");
             validForm = false;
@@ -123,15 +132,17 @@
                   let taskObj = {
                     id: taskDataObject ? taskDataObject.id : generateUniqueId("taskId"),
                     projectId: projectId,
+                    projectTitle: projectObj.title,
                     title: document.getElementById('tasksTitle').value,
                     description: document.getElementById('tasksDescription').value,
                     startDate: document.getElementById('tasksStartDate').value,
                     endDate: document.getElementById('tasksEndDate').value  || '',
-                    members: document.getElementById('tasksUser').value,
+                    member: document.getElementById('tasksUser').value,
+                    memberName: getUser(document.getElementById('tasksUser').value).name,
                     status: taskDataObject ? taskDataObject.status : 'inProgress',
-                    hours: 0
+                    hours: 0,
                   }
-
+                  
                   taskDataObject ? editTask(taskObj) : addTask(taskObj);
                   
                   document.body.removeChild(modal); // CLOSE WINDOWS
@@ -194,7 +205,7 @@
             document.getElementById('tasksDescription').value = taskDataObject.description;
             document.getElementById('tasksStartDate').value =taskDataObject.startDate;
             document.getElementById('tasksEndDate').value = taskDataObject.endDate;
-            document.getElementById('tasksUser').value = taskDataObject.members;
+            document.getElementById('tasksUser').value = taskDataObject.member;
             document.getElementById('taskIdHidden').value = taskDataObject.id;
           }
 
