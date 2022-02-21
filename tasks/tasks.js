@@ -8,18 +8,17 @@
     }
     else {
       insertNavBar('tasks');
-
     }
 
     const urlSearchParams = new URLSearchParams(window.location.search);
-    
     const projectId = urlSearchParams.get('id');
 
-    let tasks = getAllTasks();
+    let tasks = getProjectTasks(projectId);    // getAllTasks();
     
     
-        let projectList = document.getElementById("taskList")
+        let taskList = document.getElementById("taskList")
     
+        // generate UI for showing all the tasks
         tasks.forEach(task => {
             let taskItem = document.createElement('li');
             taskItem.classList.add('taskItem');
@@ -37,7 +36,7 @@
             itemContent.appendChild(p1);
 
             let memberAsgnd = document.createElement('p');
-            memberAsgnd.innerHTML = "<p><b>Member Asigned:</b>" + task.id+ "</p>";
+            memberAsgnd.innerHTML = "<p><b>Member Asigned: </b>" + task.memberName + "</p>";
             itemContent.appendChild(memberAsgnd);
 
             let deadLine = document.createElement('p');
@@ -48,14 +47,14 @@
             p3.classList = "endBtn"
             let editTaskBtn = document.createElement('button');
             editTaskBtn.className = "btn-action editTaskBtn";
-            editTaskBtn.title = "Edit Project";
+            editTaskBtn.title = "Edit Task";
             editTaskBtn.innerHTML = '<i class="fa fa-pen fa-lg"></i>';
             editTaskBtn.addEventListener('click', ()=> {showTaskDialog(task);})
 
             let completeTaskBtn = document.createElement('button');
             completeTaskBtn.className = "btn-action completeTaskBtn";
-            completeTaskBtn.title = "Complete";
-            completeTaskBtn.innerHTML = '<i class="fa fa-solid fa-circle-check fa-lg"></i>'
+            completeTaskBtn.title = "Mark Complete";
+            completeTaskBtn.innerHTML = '<i class="fa fa-solid fa-check fa-lg"></i>' // fa-circle-check 
             completeTaskBtn.addEventListener('click', ()=> {completedTask(task);})
 
             p3.appendChild(completeTaskBtn);
@@ -67,15 +66,15 @@
             taskItem.appendChild(title);
             taskItem.appendChild(itemContent);
     
-            projectList.appendChild(taskItem);
+            taskList.appendChild(taskItem);
      
             
         });
 
-        function completedTask(){
-          let taskObj = { 
-            status: 'completed'
-          }
+        function completedTask(taskObj){
+          taskObj.status = "completed";
+          editTask(taskObj);
+          location.reload();
         }
 
         function validateTaskForm(){
@@ -126,15 +125,16 @@
               onClick: (modal) => {
                 if(validateTaskForm()){
                   let taskObj = {
-                    id:generateUniqueId("taskId"),
+                    id: generateUniqueId("taskId"),
                     projectId: projectId,
-                    title:document.getElementById('tasksTitle').value,
-                    description:document.getElementById('tasksDescription').value,
+                    title: document.getElementById('tasksTitle').value,
+                    description: document.getElementById('tasksDescription').value,
                     startDate: document.getElementById('tasksStartDate').value,
                     endDate: document.getElementById('tasksEndDate').value  || '',
                     members: document.getElementById('tasksUser').value,
                     status: 'inProgress'
                   }
+
                   if(document.getElementById('taskIdHidden').value){
                     taskObj.id = document.getElementById('taskIdHidden').value;
                     editTask(taskObj);
@@ -154,8 +154,9 @@
               triggerClose: true
             }
           ];
+          
           var dataUserListObject = '';
-          getAllUsers().forEach(user => {
+          getProjectUsers(projectId).forEach(user => {
               dataUserListObject += ` <option value="${user.id}">${user.name}</option>`;
           });
           const divContainer = document.createElement("div");
@@ -191,8 +192,10 @@
             `;
     
           showModal(title, divContainer.innerHTML, buttons);
+
           if(taskDataObject !== null){
-            console.log(taskDataObject)
+            console.log(taskDataObject);
+
             document.getElementById('tasksTitle').value = taskDataObject.title;
             document.getElementById('tasksDescription').value = taskDataObject.description;
             document.getElementById('tasksStartDate').value =taskDataObject.startDate;

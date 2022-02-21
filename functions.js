@@ -1,9 +1,5 @@
 //#region login, logout related functions
 
-var getAllUsers = () => {
-    return JSON.parse(localStorage.getItem("users") || "[]");
-}
-
 var generateUniqueId = (idOfWhat) => {
 
     // generate User Id
@@ -38,11 +34,46 @@ var generateUniqueId = (idOfWhat) => {
 
     // generate Task Id
     else if(idOfWhat == "taskId") {
-        // todo: generate Id for Tasks
+        var idArr = [];
+        getAllTasks().forEach(element => {
+            idArr.push(element.id);
+        });
 
+        if(idArr.length > 0) {
+            return idArr.length + 1;
+        }
+        else {
+            return 1;
+        }
     }
 
-    
+}
+
+var getAllUsers = () => {
+    return JSON.parse(localStorage.getItem("users") || "[]");
+}
+
+// todo: optimise this function
+var getProjectUsers = (projectId) => {
+    var users = [];
+    var allUsers = getAllUsers();
+    var project = null;
+    getAllProjects().forEach(proj => {
+        if(proj.id == projectId) {
+            project = proj;
+        }
+    });
+
+    var userIds = project.members;
+    userIds.forEach(userId => {
+        allUsers.forEach(_user => {
+            if(userId === _user.id) {
+                users.push(_user);
+            }
+        });
+    });
+
+    return users;
 }
 
 var saveCurrentUser = (user) => {
@@ -217,7 +248,7 @@ var getAllTasks = () => {
 var getProjectTasks = (projectId) => {
     var projectTasks = [];
     getAllTasks().forEach( task => {
-        if(task.projectId == projectId) {
+        if(task.projectId === projectId) {
             projectTasks.push(task);
         }
     });
