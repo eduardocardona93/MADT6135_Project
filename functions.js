@@ -38,8 +38,17 @@ var generateUniqueId = (idOfWhat) => {
 
     // generate Task Id
     else if(idOfWhat == "taskId") {
-        // todo: generate Id for Tasks
+        var idArr = [];
+        getAllTasks().forEach(element => {
+            idArr.push(element.id);
+        });
 
+        if(idArr.length > 0) {
+            return idArr.length + 1;
+        }
+        else {
+            return 1;
+        }
     }
 
     
@@ -56,7 +65,7 @@ var getCurrentUser = () => {
 
 var updateUser = (user) => {
     let users = getAllUsers();
-    const userIndex = users.findIndex(x => x.id === user.id);
+    const userIndex = users.findIndex(x => x.id == user.id);
     users[userIndex] = user;
     localStorage.setItem("users", JSON.stringify(users));
 }
@@ -77,6 +86,12 @@ var addUser = (user) => {
     // Saving
     localStorage.setItem("users", JSON.stringify(users));
 };
+
+var getUser = (userId) => {
+
+    return getAllUsers().find((user) => userId == user.id)
+
+}
 
 var validateEmail = (email) => {
     var regex = /^\S+@\S+\.\S+$/;
@@ -164,7 +179,7 @@ var addProject = (project) => {
 
 var editProject = (project) => {
     let projects = getAllProjects();
-    const projectIndex = projects.findIndex(x => x.id === project.id);
+    const projectIndex = projects.findIndex(x => x.id == project.id);
     projects[projectIndex] = project;
     localStorage.setItem("projects", JSON.stringify(projects));
 }
@@ -205,7 +220,7 @@ var addTask = (task) => {
 };
 var editTask = (task) => {
     let tasks = getAllTasks();
-    const taskIndex = tasks.findIndex(x => x.id === task.id);
+    const taskIndex = tasks.findIndex(x => x.id == task.id);
     tasks[taskIndex] = task;
     
     localStorage.setItem("tasks", JSON.stringify(tasks));

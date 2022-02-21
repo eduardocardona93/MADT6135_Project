@@ -8,7 +8,7 @@
     
     var data = [];
     getAllUsers().forEach(user => {
-        const currentUserLabel = (user.id === currentUser.id) ? "(Me)" : "";
+        const currentUserLabel = (user.id == currentUser.id) ? "(Me)" : "";
         data.push( { name: user.name + currentUserLabel, id: user.id});
     });
 

@@ -21,6 +21,7 @@
         let projectList = document.getElementById("taskList")
     
         tasks.forEach(task => {
+          console.log(task)
             let taskItem = document.createElement('li');
             taskItem.classList.add('taskItem');
             taskItem.classList.add(task.status);
@@ -37,7 +38,7 @@
             itemContent.appendChild(p1);
 
             let memberAsgnd = document.createElement('p');
-            memberAsgnd.innerHTML = "<p><b>Member Asigned:</b>" + task.id+ "</p>";
+            memberAsgnd.innerHTML = "<p><b>Member Asigned:</b>" + task.memberName+ "</p>";
             itemContent.appendChild(memberAsgnd);
 
             let deadLine = document.createElement('p');
@@ -132,7 +133,8 @@
                     description:document.getElementById('tasksDescription').value,
                     startDate: document.getElementById('tasksStartDate').value,
                     endDate: document.getElementById('tasksEndDate').value  || '',
-                    members: document.getElementById('tasksUser').value,
+                    member: document.getElementById('tasksUser').value,
+                    memberName: getUser(document.getElementById('tasksUser').value).name,
                     status: 'inProgress'
                   }
                   if(document.getElementById('taskIdHidden').value){
@@ -197,7 +199,7 @@
             document.getElementById('tasksDescription').value = taskDataObject.description;
             document.getElementById('tasksStartDate').value =taskDataObject.startDate;
             document.getElementById('tasksEndDate').value = taskDataObject.endDate;
-            document.getElementById('tasksUser').value = taskDataObject.members;
+            document.getElementById('tasksUser').value = taskDataObject.member;
             document.getElementById('taskIdHidden').value = taskDataObject.id;
           }
 
