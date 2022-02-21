@@ -2,12 +2,11 @@ var loggedInUser = getLoggedInUser();
 
 // This is to prevent user from opening home page if somehow he got logged out.
 // Alternatively, this is to prevent user from opening home page without logging in.
-(function() {
+(function () {
   // loggedInUser = getLoggedInUser();
-  if(loggedInUser == null || loggedInUser == "") {
+  if (loggedInUser == null || loggedInUser == "") {
     location.href = "../index.html";
-  }
-  else {
+  } else {
     insertNavBar('projects');
   }
 
@@ -31,7 +30,7 @@ function generateDummyProjects() {
     return statuses[Math.floor(Math.random() * 2)];
   }
 
-  for(let i = 1; i <= 15; i++) {
+  for (let i = 1; i <= 15; i++) {
     var proj = {
       id: i,
       title: "Project " + i,
@@ -48,33 +47,31 @@ function generateDummyProjects() {
   return projects;
 }
 
-function showUsersDialog(){
+function showUsersDialog() {
   const title = 'Users List';
-  const buttons = [  
-    { // CLOSE WINDOWS
-      label: "Close",
-      type: 'close',
-      onClick: (modal) => {},
-      triggerClose: true
-    }
-  ];
-  let usersHtml = getAllUsers().reduce( (x,a) => {
-    return x +=`<button type="button" class="collapsible">${a.name}</button>
+  const buttons = [{ // CLOSE WINDOWS
+    label: "Close",
+    type: 'close',
+    onClick: (modal) => {},
+    triggerClose: true
+  }];
+  const usersHtml = getAllUsers().reduce((x, a) => {
+    return x += `<button type="button" class="collapsible">${a.name}</button>
                 <div class="content">
                   <p><b>Email: </b>${a.email}</p>
                   <p><b>Rate: </b> $ ${parseFloat(a.rate)}</p>
                 </div>`;
-  } , "") ;
+  }, "");
   const divContainer = document.createElement("div");
   divContainer.innerHTML = `
   <div class="form">${usersHtml}</div>
   `;
   showModal(title, divContainer.innerHTML, buttons);
   document.querySelectorAll(".collapsible").forEach(element => {
-    element.addEventListener("click", function() {
+    element.addEventListener("click", function () {
       this.classList.toggle("active");
       var content = this.nextElementSibling;
-      if (content.style.maxHeight){
+      if (content.style.maxHeight) {
         content.style.maxHeight = null;
       } else {
         content.style.maxHeight = content.scrollHeight + "px";
@@ -83,16 +80,15 @@ function showUsersDialog(){
   });
 
 
-  
+
 }
 
-function showProjectDialog(projectDataObject = null){
+function showProjectDialog(projectDataObject = null) {
   const title = projectDataObject ? 'Edit Project' : 'Create New Project';
   let selectedMembers = []
 
   // MODAL BUTTONS
-  const buttons = [  
-    { // SAVE BUTTON
+  const buttons = [{ // SAVE BUTTON
       label: "Save Project",
       onClick: (modal) => {
         // SAVE PROJECT DATA
@@ -101,30 +97,29 @@ function showProjectDialog(projectDataObject = null){
         const projectDescriptionEl = document.getElementById('projectDescription');
 
         // VALIDATIONS FOR THE MODAL FORM
-        if (projectTitleEl.value == "" ) {
-          setInputError(projectTitleEl,"Please enter a title")
-        }else{
+        if (projectTitleEl.value == "") {
+          setInputError(projectTitleEl, "Please enter a title")
+        } else {
           clearInputError(projectTitleEl);
           setInputSuccess(projectTitleEl);
         }
 
-        if(memberSelection.value.length == 0) {
+        if (memberSelection.value.length == 0) {
           setInputError(projectMembersEl, "Please select at least one member");
-        }
-        else {
+        } else {
           clearInputError(projectMembersEl);
           setInputSuccess(projectMembersEl);
         }
 
-        if (projectDescriptionEl.value == "" ) {
-          setInputError(projectDescriptionEl,"Please enter a description")
-        }else{
+        if (projectDescriptionEl.value == "") {
+          setInputError(projectDescriptionEl, "Please enter a description")
+        } else {
           clearInputError(projectDescriptionEl);
           setInputSuccess(projectDescriptionEl);
         }
 
         // SAVE THE FORM
-        if(projectTitleEl.value !== "" && memberSelection.value.length > 0 && projectDescriptionEl.value !== ""){
+        if (projectTitleEl.value !== "" && memberSelection.value.length > 0 && projectDescriptionEl.value !== "") {
           let projectObj = {
             id: generateUniqueId("projectId"),
             title: projectTitleEl.value,
@@ -134,14 +129,14 @@ function showProjectDialog(projectDataObject = null){
             members: memberSelection.value,
             status: "inProgress",
           }
-          if(document.getElementById('projectIdHidden').value ){
+          if (document.getElementById('projectIdHidden').value) {
             projectObj.id = document.getElementById('projectIdHidden').value;
             editProject(projectObj);
-          }else{
+          } else {
             addProject(projectObj);
           }
 
-         
+
           document.body.removeChild(modal); // CLOSE WINDOWS
 
           location.reload();
@@ -160,7 +155,7 @@ function showProjectDialog(projectDataObject = null){
   // GET ALL USERS BUT THE CURRENT USER
 
   const divContainer = document.createElement("div");
-    divContainer.innerHTML = `
+  divContainer.innerHTML = `
       <form class ="form" id="formProject">
           <div class="form__input-group">
               <label for="projectTitle">Project Title</label>
@@ -191,16 +186,19 @@ function showProjectDialog(projectDataObject = null){
     document.getElementById('projectTitle').value = projectDataObject.title;
     selectedMembers = projectDataObject.members;
     document.getElementById('projectDescription').value = projectDataObject.description;
-    document.getElementById('projectIdHidden').value = projectDataObject.id ;
+    document.getElementById('projectIdHidden').value = projectDataObject.id;
   }
   var ele = document.getElementById('container');
-  if(ele) {
-      ele.style.visibility = "visible";
+  if (ele) {
+    ele.style.visibility = "visible";
   }
 
   var dataUserListObject = [];
   getAllUsers().forEach(user => {
-      dataUserListObject.push( { name: user.name , id: user.id});
+    dataUserListObject.push({
+      name: user.name,
+      id: user.id
+    });
   });
 
 
@@ -209,19 +207,22 @@ function showProjectDialog(projectDataObject = null){
     // set the members data to dataSource property
     dataSource: dataUserListObject,
     // map the appropriate columns to fields property
-    fields: { text: 'name', value: 'id' },
+    fields: {
+      text: 'name',
+      value: 'id'
+    },
 
     // adding a default selected value to add the user who is creating the project
     value: selectedMembers,
-    
+
     // set the placeholder to MultiSelect input element
     placeholder: 'Click to see list of members',
     // set the type of mode for how to visualized the selected items in input element.
     mode: 'Box',
     // bind the tagging event
     tagging: function (e) {
-        // set the current selected item text as class to chip element.
-        e.setClass(e.itemData[memberSelection.fields.text].toLowerCase().replace(' ', '_'));
+      // set the current selected item text as class to chip element.
+      e.setClass(e.itemData[memberSelection.fields.text].toLowerCase().replace(' ', '_'));
     }
   });
 
@@ -230,17 +231,75 @@ function showProjectDialog(projectDataObject = null){
 
 }
 
+
+function showTasksDialog() {
+  const title = 'My tasks';
+  const divContainer = document.createElement("div");
+  console.log(currentUser)
+  const tasksHTML = getAllTasks()
+  .filter(task => { return parseInt(task.member )== currentUser.id; })
+  .sort ( (a, b) => { return new Date(a.startDate) - new Date(b.startDate); })
+  .reduce((x, a) => {
+    const actions = a.status === 'inProgress' ? `<p class="endBtn"><button class="btn-action completeTaskBtn" data-task-id="${a.id}" title="Complete"><i class="fa fa-solid fa-circle-check fa-lg"></i></button></p>` : '';
+    return x += `<button type="button" class="collapsible ${a.status}" data-id="${a.id}"><b>${a.title} (Project: ${a.projectTitle} )</b></button>
+                <div class="content">
+                  <p><b>Date End: </b> ${new Date(a.startDate)}</p>
+                  <p><b>Date End: </b> ${new Date(a.endDate)}</p>
+                  <p><b>Description: </b></p>
+                  <p>${a.description}</p>
+                  ${actions}
+                </div>`;
+  }, "");
+
+  
+  divContainer.innerHTML = `
+    <div class="form">${tasksHTML}</div>
+  `;
+  const buttons = [{ // CLOSE WINDOWS
+    label: "Close",
+    type: 'close',
+    onClick: (modal) => {},
+    triggerClose: true
+  }];
+  showModal(title, divContainer.innerHTML, buttons);
+
+  const allCollapsibles = document.querySelectorAll(".collapsible")
+  allCollapsibles.forEach(element => {
+    element.addEventListener("click", function (clickedEvent) {
+      allCollapsibles.forEach(collap => {
+        if (clickedEvent.target.getAttribute('data-id') == collap.getAttribute('data-id')) {
+          this.classList.toggle("active");
+          var content = this.nextElementSibling;
+          if (content.style.maxHeight) {
+            content.style.maxHeight = null;
+          } else {
+            content.style.maxHeight = content.scrollHeight + "px";
+          }
+        }else{
+          collap.classList.remove("active"); 
+          collap.nextElementSibling.style.maxHeight = null;
+        }
+
+      });
+
+      
+    });
+  });
+}
 // start execution when Content Loaded
 document.addEventListener("DOMContentLoaded", () => {
 
-  document.getElementById("createNewProject").addEventListener('click', () => {showProjectDialog()})
+  document.getElementById("createNewProject").addEventListener('click', () => {
+    showProjectDialog()
+  })
   document.getElementById("checkCurrentUsers").addEventListener('click', showUsersDialog)
+  document.getElementById("checkCurrentTasks").addEventListener('click', showTasksDialog)
 
   // * uncomment this to generate dummy projects for testing purpose
   // generateDummyProjects().forEach( proj => {
   //   addProject(proj);
   // });
-  
+
   let projects = getProjects(currentUser.id);
 
   projects.forEach(project => {
@@ -249,7 +308,7 @@ document.addEventListener("DOMContentLoaded", () => {
     projectItem.classList.add(project.status);
 
     projectItem.setAttribute("data-project", JSON.stringify(project));
-    
+
     let title = document.createElement('span');
     title.classList.add('title');
     title.innerText = project.title;
@@ -258,11 +317,11 @@ document.addEventListener("DOMContentLoaded", () => {
     itemContent.classList.add('itemContent');
 
     let p1 = document.createElement('p');
-    p1.innerHTML = "<b>Manager: </b><span>"+ project.leaderName+"</span>"
+    p1.innerHTML = "<b>Manager: </b><span>" + project.leaderName + "</span>"
     itemContent.appendChild(p1);
-    
+
     let p2 = document.createElement('p');
-    p2.innerHTML = "<b>Team members: </b><span>"+ project.members.length+"</span>";
+    p2.innerHTML = "<b>Team members: </b><span>" + project.members.length + "</span>";
     itemContent.appendChild(p2);
 
     let p3 = document.createElement('p');
@@ -272,12 +331,16 @@ document.addEventListener("DOMContentLoaded", () => {
     editProjectBtn.className = "btn-action editProjectBtn";
     editProjectBtn.title = "Edit Project";
     editProjectBtn.innerHTML = '<i class="fa fa-pen fa-lg"></i>';
-    editProjectBtn.addEventListener('click', ()=> {showProjectDialog(project);})
+    editProjectBtn.addEventListener('click', () => {
+      showProjectDialog(project);
+    })
     let goToTasksBtn = document.createElement('button');
     goToTasksBtn.className = "btn-action blue goToTasksBtn";
     goToTasksBtn.title = "Project Tasks";
     goToTasksBtn.innerHTML = '<i class="fa fa-list-check fa-lg"></i>';
-    goToTasksBtn.addEventListener('click', ()=> {location.href = "../tasks/tasks.html?id="+project.id;;})
+    goToTasksBtn.addEventListener('click', () => {
+      location.href = "../tasks/tasks.html?id=" + project.id;;
+    })
     p3.appendChild(editProjectBtn);
     p3.appendChild(goToTasksBtn);
 
@@ -300,14 +363,3 @@ document.addEventListener("DOMContentLoaded", () => {
   //#endregion
 
 });
-
-    
-
-
-    
-
-    
-
-    
-
-    

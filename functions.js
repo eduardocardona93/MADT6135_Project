@@ -188,6 +188,13 @@ var getAllProjects = () => {
     return JSON.parse(localStorage.getItem("projects") || "[]");
 }
 
+var getProject = (projectId) => {
+
+    return getAllProjects().find((project) => projectId == project.id);
+
+}
+
+
 var getProjects = (userId) => {
     var userProjects = [];
     getAllProjects().forEach( project => {

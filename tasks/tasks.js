@@ -14,6 +14,7 @@
     const urlSearchParams = new URLSearchParams(window.location.search);
     
     const projectId = urlSearchParams.get('id');
+    const projectObj = getProject(projectId);
 
     let tasks = getAllTasks();
     
@@ -49,7 +50,7 @@
             p3.classList = "endBtn"
             let editTaskBtn = document.createElement('button');
             editTaskBtn.className = "btn-action editTaskBtn";
-            editTaskBtn.title = "Edit Project";
+            editTaskBtn.title = "Edit task";
             editTaskBtn.innerHTML = '<i class="fa fa-pen fa-lg"></i>';
             editTaskBtn.addEventListener('click', ()=> {showTaskDialog(task);})
 
@@ -84,6 +85,7 @@
           const tasksTitle = document.getElementById('tasksTitle');
           const tasksDescription = document.getElementById('tasksDescription');
           const tasksStartDate = document.getElementById('tasksStartDate');
+          const tasksEndDate = document.getElementById('tasksEndDate');
           const tasksUser = document.getElementById('tasksUser');
           if(tasksTitle.value == ''){
             setInputError(tasksTitle,"Please enter a title");
@@ -108,7 +110,13 @@
             clearInputError(tasksStartDate);
             setInputSuccess(tasksStartDate);
           }
-
+          if(tasksEndDate.value == ''){
+            setInputError(tasksEndDate,"Please enter an end date");
+            validForm = false;
+          }else{
+            clearInputError(tasksEndDate);
+            setInputSuccess(tasksEndDate);
+          }
           if(tasksUser.value == ''){
             setInputError(tasksUser,"Please enter an user");
             validForm = false;
@@ -129,6 +137,7 @@
                   let taskObj = {
                     id:generateUniqueId("taskId"),
                     projectId: projectId,
+                    projectTitle: projectObj.title,
                     title:document.getElementById('tasksTitle').value,
                     description:document.getElementById('tasksDescription').value,
                     startDate: document.getElementById('tasksStartDate').value,
