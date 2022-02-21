@@ -14,6 +14,7 @@
     const projectId = urlSearchParams.get('id');
 
     let tasks = getProjectTasks(projectId);    // getAllTasks();
+    var projectUsers = getProjectUsers(projectId);
     
     
         let taskList = document.getElementById("taskList")
@@ -36,7 +37,7 @@
             itemContent.appendChild(p1);
 
             let memberAsgnd = document.createElement('p');
-            memberAsgnd.innerHTML = "<p><b>Member Asigned: </b>" + task.memberName + "</p>";
+            memberAsgnd.innerHTML = "<p><b>Member Asigned: </b>" + projectUsers[projectUsers.findIndex(x => x.id == task.members)].name + "</p>";
             itemContent.appendChild(memberAsgnd);
 
             let deadLine = document.createElement('p');
@@ -53,9 +54,10 @@
 
             let completeTaskBtn = document.createElement('button');
             completeTaskBtn.className = "btn-action completeTaskBtn";
+            task.status === 'completed' ? completeTaskBtn.classList.add('completeTaskBtn-hidden') : "" ;
             completeTaskBtn.title = "Mark Complete";
             completeTaskBtn.innerHTML = '<i class="fa fa-solid fa-check fa-lg"></i>' // fa-circle-check 
-            completeTaskBtn.addEventListener('click', ()=> {completedTask(task);})
+            completeTaskBtn.addEventListener('click', ()=> {showHoursDialog(task);})
 
             p3.appendChild(completeTaskBtn);
             p3.appendChild(editTaskBtn);
@@ -70,12 +72,6 @@
      
             
         });
-
-        function completedTask(taskObj){
-          taskObj.status = "completed";
-          editTask(taskObj);
-          location.reload();
-        }
 
         function validateTaskForm(){
           let validForm = true;
@@ -125,22 +121,19 @@
               onClick: (modal) => {
                 if(validateTaskForm()){
                   let taskObj = {
-                    id: generateUniqueId("taskId"),
+                    id: taskDataObject ? taskDataObject.id : generateUniqueId("taskId"),
                     projectId: projectId,
                     title: document.getElementById('tasksTitle').value,
                     description: document.getElementById('tasksDescription').value,
                     startDate: document.getElementById('tasksStartDate').value,
                     endDate: document.getElementById('tasksEndDate').value  || '',
                     members: document.getElementById('tasksUser').value,
-                    status: 'inProgress'
+                    status: taskDataObject ? taskDataObject.status : 'inProgress',
+                    hours: 0
                   }
 
-                  if(document.getElementById('taskIdHidden').value){
-                    taskObj.id = document.getElementById('taskIdHidden').value;
-                    editTask(taskObj);
-                  }else{
-                    addTask(taskObj);
-                  }
+                  taskDataObject ? editTask(taskObj) : addTask(taskObj);
+                  
                   document.body.removeChild(modal); // CLOSE WINDOWS
                   location.reload();
                 }
@@ -156,9 +149,10 @@
           ];
           
           var dataUserListObject = '';
-          getProjectUsers(projectId).forEach(user => {
+          projectUsers.forEach(user => {
               dataUserListObject += ` <option value="${user.id}">${user.name}</option>`;
           });
+
           const divContainer = document.createElement("div");
           divContainer.innerHTML = `
               <form class ="form" id="formTask">
@@ -203,6 +197,65 @@
             document.getElementById('tasksUser').value = taskDataObject.members;
             document.getElementById('taskIdHidden').value = taskDataObject.id;
           }
+
+        }
+
+        function validateHoursForm() {
+          let validForm = true;
+          const taskHours = document.getElementById('hoursWorked');
+
+          if(taskHours.value == ''){
+            setInputError(taskHours, "Please enter number of hours worked on this task!");
+            validForm = false;
+          }
+          else{
+            clearInputError(taskHours);
+            setInputSuccess(taskHours);
+          }
+
+          return validForm;
+        }
+
+        function showHoursDialog(task) {
+          const title = "Mark as Complete";
+
+          const divContainer = document.createElement("div");
+          divContainer.innerHTML = `
+          <form class ="form" id="markDoneForm">
+              
+              <div class="form__input-group">
+                  <label for="hoursWorked">Howmany hours have you worked on this task?</label>
+                  <input type="number" id="hoursWorked" class="form__input" autofocus >
+                  <div class="form__input-error-message"></div>
+              </div>
+              
+          </form>`;
+
+          const buttons = [  
+            { // SAVE BUTTON
+              label: "Mark Complete",
+              onClick: (modal) => {
+                if(validateHoursForm()){
+                  task.hours = document.getElementById('hoursWorked').value;
+                  task.status = 'completed';
+                  editTask(task);
+                  
+                  document.body.removeChild(modal); // CLOSE WINDOWS
+                  document.getElementsByClassName('completeTaskBtn')[0].classList.add('completeTaskBtn-hidden');
+                  location.reload();
+                }
+              },
+              triggerClose: false
+            },
+            { // CLOSE WINDOWS
+              label: "Close",
+              type: 'close',
+              onClick: (modal) => {},
+              triggerClose: true
+            }
+          ];
+
+          showModal(title, divContainer.innerHTML, buttons);
 
         }
         

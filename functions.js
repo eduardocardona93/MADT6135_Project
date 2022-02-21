@@ -236,7 +236,8 @@ var addTask = (task) => {
 };
 var editTask = (task) => {
     let tasks = getAllTasks();
-    const taskIndex = tasks.findIndex(x => x.id === task.id);
+    const taskIndex = tasks.findIndex(x => x.id == task.id);
+    console.log("index: " + taskIndex);
     tasks[taskIndex] = task;
     
     localStorage.setItem("tasks", JSON.stringify(tasks));

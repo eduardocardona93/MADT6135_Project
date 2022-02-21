@@ -39,7 +39,8 @@ function generateDummyProjects() {
       leaderName: randomLeader(),
       leaderId: Math.floor(Math.random() * 3),
       members: [1, 2, 3, 4, 5, 6],
-      status: randomStatus()
+      status: randomStatus(),
+      cost: 0
     }
 
     projects.push(proj);
@@ -133,6 +134,7 @@ function showProjectDialog(projectDataObject = null){
             leaderId: currentUser.id,
             members: memberSelection.value,
             status: "inProgress",
+            cost: 0
           }
           if(document.getElementById('projectIdHidden').value ){
             projectObj.id = document.getElementById('projectIdHidden').value;
@@ -187,6 +189,7 @@ function showProjectDialog(projectDataObject = null){
     `;
 
   showModal(title, divContainer.innerHTML, buttons);
+
   if (projectDataObject !== null) {
     document.getElementById('projectTitle').value = projectDataObject.title;
     selectedMembers = projectDataObject.members;
