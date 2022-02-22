@@ -246,18 +246,23 @@ function showTasksDialog() {
     let goToTasksBtn = document.createElement('button');
     goToTasksBtn.className = "btn-action blue ";
     goToTasksBtn.title = "Go to project Tasks";
-    goToTasksBtn.innerHTML = '<i class="fa-solid fa-share"></i>';
+    goToTasksBtn.innerHTML = `<i class="fa-solid fa-share" data-project-id="${task.projectId}"></i>`;
     goToTasksBtn.addEventListener('click', () => {
+      console.log("go to task clicked");
       location.href = "../tasks/tasks.html?id=" + task.projectId;
     })
-    return x += `<button type="button" class="collapsible ${task.status}" data-id="${task.id}"><b>${task.title} (Project: ${task.projectTitle} )</b></button>
-                <div class="content">
+    console.log(JSON.stringify(task));
+    x += `<button type="button" class="collapsible ${task.status}" data-id="${task.id}"><b>${task.title} (Project: ${task.projectTitle} )</b></button>
+                <div id="taskContent" class="content">
                   <p><b>Date End: </b> ${new Date(task.startDate)}</p>
                   <p><b>Date End: </b> ${new Date(task.endDate)}</p>
                   <p><b>Description: </b></p>
                   <p>${task.description}</p>
-                  ${goToTasksBtn.innerHTML}
+                  <button type="button" id="btnGotoTask" class="btn-action blue" data-project-id="${task.projectId}" title="Go to project Tasks"> ${goToTasksBtn.innerHTML} </button>
                 </div>`;
+
+    return x;
+
   }, "");
 
   divContainer.innerHTML = `
@@ -272,6 +277,13 @@ function showTasksDialog() {
   }];
 
   showModal(title, divContainer.innerHTML, buttons);
+
+  document.getElementById('btnGotoTask').addEventListener('click', (event) => {
+    console.log("go to task clicked");
+    
+    console.log(event.target.dataset.projectId);
+    location.href = "../tasks/tasks.html?id=" + event.target.dataset.projectId;
+  });
 
   const allCollapsibles = document.querySelectorAll(".collapsible")
   allCollapsibles.forEach(element => {
