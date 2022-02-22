@@ -258,7 +258,7 @@ function showTasksDialog() {
                   <p><b>Date End: </b> ${new Date(task.endDate)}</p>
                   <p><b>Description: </b></p>
                   <p>${task.description}</p>
-                  <button type="button" id="btnGotoTask" class="btn-action blue" data-project-id="${task.projectId}" title="Go to project Tasks"> ${goToTasksBtn.innerHTML} </button>
+                  <button type="button" id="btnGotoTask" class="btn-action blue btnGotoTask" data-project-id="${task.projectId}" title="Go to project Tasks"> ${goToTasksBtn.innerHTML} </button>
                 </div>`;
 
     return x;
@@ -278,12 +278,14 @@ function showTasksDialog() {
 
   showModal(title, divContainer.innerHTML, buttons);
 
-  document.getElementById('btnGotoTask').addEventListener('click', (event) => {
-    console.log("go to task clicked");
-    
-    console.log(event.target.dataset.projectId);
-    location.href = "../tasks/tasks.html?id=" + event.target.dataset.projectId;
-  });
+  document.querySelectorAll(".btnGotoTask").forEach(btn => {
+    btn.addEventListener('click', (event) => {
+      console.log("go to task clicked");
+      
+      console.log(event.target.dataset.projectId);
+      location.href = "../tasks/tasks.html?id=" + event.target.dataset.projectId;
+    });
+  })
 
   const allCollapsibles = document.querySelectorAll(".collapsible")
   allCollapsibles.forEach(element => {
