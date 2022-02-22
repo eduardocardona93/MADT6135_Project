@@ -237,6 +237,9 @@ var getProjects = (userId) => {
         if(project.members.includes(userId)) {
             userProjects.push(project);
         }
+        else if(project.leaderId == userId) {
+            userProjects.push(project);
+        }
     });
 
     console.log(userProjects);
@@ -245,7 +248,7 @@ var getProjects = (userId) => {
 
 //#endregion
 
-//#region Projects related functions
+//#region Tasks related functions
 
 var addTask = (task) => {
     // fetching all projects
