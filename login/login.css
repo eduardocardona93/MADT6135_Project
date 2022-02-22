@@ -156,3 +156,7 @@ body {
     text-decoration: underline;
 }
     
+.modal--content{
+    padding: 25px;
+    line-height: 1.5;
+ }

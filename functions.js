@@ -115,6 +115,12 @@ var getUser = (userId) => {
 
 }
 
+var getUserByNameOrEmail = (unameOrEmail) => {
+
+    return getAllUsers().find((user) => unameOrEmail.toLowerCase() == user.email.toLowerCase() || unameOrEmail.toLowerCase() == user.name.toLowerCase())
+
+}
+
 var validateEmail = (email) => {
     var regex = /^\S+@\S+\.\S+$/;
     return regex.test(email);
@@ -181,6 +187,11 @@ var getLoggedInUser = () => {
     console.log(user);
 
     return user;
+}
+
+var userExists = (unameOrEmail) => { 
+    const user = getUserByNameOrEmail(unameOrEmail) ;
+    return   user && user.name;
 }
 
 //#endregion

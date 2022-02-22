@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log in or sign up</title>
     <link rel="shortcut icon" href="/assets/favion.ico">
+    <link rel="stylesheet" href="../auxCss/modals.css">
+
     <link rel="stylesheet" href="./login/login.css">
 </head>
 <body>
@@ -22,7 +24,7 @@
             </div>
             <button class="form__button" type="submit">Continue</button>
             <p class="form__text">
-                <a href="#" class="form__link">Forgot your password?</a>
+                <a href="#" class="form__link" id="forgotPasswordLink">Forgot your password?</a>
             </p>
             <p class="form__text">
                 <a class="form__link" href="./" id="linkCreateAccount">Don't have an account? Create account</a>
@@ -58,6 +60,7 @@
         </form>
     </div>
     <script src="functions.js"></script>
+    <script src="./auxJs/modals.js"></script>
     <script src="./login/login.js"></script>
     
 </body>

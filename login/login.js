@@ -55,6 +55,24 @@ function login(loginForm) {
     return succes;
 }
 
+function validateResetPass(loginForm) {
+    let success = false;
+    if(login_inputEmail.value == "") {
+        success = false;
+        setFormMessage(loginForm, "error", "Enter email address or username!");
+    }else{        
+        if(userExists(login_inputEmail.value)) {
+            success = true;
+            clearFormMessage(loginForm)
+        }else{
+            success = false;
+            setFormMessage(loginForm, "error", "Invalid username or email");
+        }
+
+    }
+
+    return success
+}
 function validateSignupInfo(signupForm) {
     if(signup_inputUname.value == "" || signup_inputEmail.value == "" ||
         signup_inputPassword.value == "" || signup_inputConfirmPassword.value == "" ||
@@ -107,6 +125,32 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         loginForm.classList.add("form--hidden");
         createAccountForm.classList.remove("form--hidden");
+    });
+    document.querySelector("#forgotPasswordLink").addEventListener("click", e => {
+        e.preventDefault();
+        if(validateResetPass(loginForm)){
+            const title = 'Reset password';
+            let userFound  = getUserByNameOrEmail(login_inputEmail.value)
+            var randomstring = Math.random().toString(36).slice(-8);
+            userFound.password = randomstring;
+            updateUser(userFound);
+            // MODAL BUTTONS
+            const buttons = [
+                { // CLOSE WINDOWS
+                    label: "OK!",
+                    type: 'close',
+                    onClick: (modal) => {},
+                    triggerClose: true
+                }
+            ]
+            const divContainer = document.createElement("div");
+            divContainer.innerHTML = `
+                Your new password is <b> ${randomstring} </b>
+            `;
+            
+            showModal(title, divContainer.innerHTML, buttons);
+        }
+
     });
 
     document.querySelector("#linkLogin").addEventListener("click", e => {
