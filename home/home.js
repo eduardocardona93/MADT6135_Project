@@ -239,33 +239,39 @@ function showProjectDialog(projectDataObject = null) {
 function showTasksDialog() {
   const title = 'My tasks';
   const divContainer = document.createElement("div");
-  console.log(currentUser)
-  const tasksHTML = getAllTasks()
+  const myTasks = getAllTasks()
   .filter(task => { return parseInt(task.member )== currentUser.id && task.status === 'inProgress'; })
-  .sort ( (a, b) => { return new Date(a.startDate) - new Date(b.startDate); })
-  .reduce((x, task) => {
-    let goToTasksBtn = document.createElement('button');
-    goToTasksBtn.className = "btn-action blue ";
-    goToTasksBtn.title = "Go to project Tasks";
-    goToTasksBtn.innerHTML = `<i class="fa-solid fa-share" data-project-id="${task.projectId}"></i>`;
-    goToTasksBtn.addEventListener('click', () => {
-      console.log("go to task clicked");
-      location.href = "../tasks/tasks.html?id=" + task.projectId;
-    })
-    console.log(JSON.stringify(task));
-    x += `<button type="button" class="collapsible ${task.status}" data-id="${task.id}"><b>${task.title} (Project: ${task.projectTitle} )</b></button>
-                <div id="taskContent" class="content">
-                  <p><b>Date End: </b> ${new Date(task.startDate)}</p>
-                  <p><b>Date End: </b> ${new Date(task.endDate)}</p>
-                  <p><b>Description: </b></p>
-                  <p>${task.description}</p>
-                  <button type="button" id="btnGotoTask" class="btn-action blue btnGotoTask" data-project-id="${task.projectId}" title="Go to project Tasks"> ${goToTasksBtn.innerHTML} </button>
-                </div>`;
+  .sort ( (a, b) => { return new Date(a.startDate) - new Date(b.startDate); });
+  console.log(myTasks)
+  let tasksHTML = '';
+  if(myTasks.length > 0){
+    tasksHTML = myTasks
+    .reduce((x, task) => {
+      let goToTasksBtn = document.createElement('button');
+      goToTasksBtn.className = "btn-action blue ";
+      goToTasksBtn.title = "Go to project Tasks";
+      goToTasksBtn.innerHTML = `<i class="fa-solid fa-share" data-project-id="${task.projectId}"></i>`;
+      goToTasksBtn.addEventListener('click', () => {
+        console.log("go to task clicked");
+        location.href = "../tasks/tasks.html?id=" + task.projectId;
+      })
+      x += `<button type="button" class="collapsible ${task.status}" data-id="${task.id}"><b>${task.title} (Project: ${task.projectTitle} )</b></button>
+                  <div id="taskContent" class="content">
+                    <p><b>Date End: </b> ${new Date(task.startDate)}</p>
+                    <p><b>Date End: </b> ${new Date(task.endDate)}</p>
+                    <p><b>Description: </b></p>
+                    <p>${task.description}</p>
+                    <button type="button" id="btnGotoTask" class="btn-action blue" data-project-id="${task.projectId}" title="Go to project Tasks"> ${goToTasksBtn.innerHTML} </button>
+                  </div>`;
+  
+      return x;
+      
+    }, "");
+  }else{
+    tasksHTML =  "<p> You have no pending tasks! </p>";
+  }
 
-    return x;
-
-  }, "");
-
+  
   divContainer.innerHTML = `
     <div class="form">${tasksHTML}</div>
   `;
