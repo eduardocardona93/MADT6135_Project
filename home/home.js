@@ -336,7 +336,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let p3 = document.createElement('p');
     p3.classList = "endBtn"
-    if(project.status === "inProgress"){
+    if(project.status === "inProgress" && project.leaderId == currentUser.id) {
       let editProjectBtn = document.createElement('button');
       editProjectBtn.className = "btn-action editProjectBtn";
       editProjectBtn.title = "Edit Project";
@@ -346,7 +346,7 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       p3.appendChild(editProjectBtn);
 
-    }else{
+    }else if(project.status === 'completed') {
       const finishedProjectLabel = document.createElement('div');
       finishedProjectLabel.classList.add('endLabel');
       finishedProjectLabel.innerHTML = `<b>Cost: </b> $ ${parseFloat(project.cost).toFixed(2)} `
