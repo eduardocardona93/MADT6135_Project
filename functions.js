@@ -150,9 +150,7 @@ var loginUser = (unameOrEmail, password) => {
         // let uname = unameOrEmail
 
         getAllUsers().forEach( user => {
-            console.log(user)
-            console.log(unameOrEmail == user.name && password == user.password)
-            if(unameOrEmail == user.name && password == user.password) {
+            if(unameOrEmail.toLowerCase() == user.name.toLowerCase() && password == user.password) {
                 // return logged in user
                 console.log(user);
                 foundUser = user;
