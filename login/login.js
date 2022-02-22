@@ -57,8 +57,8 @@ function login(loginForm) {
 
 function validateSignupInfo(signupForm) {
     if(signup_inputUname.value == "" || signup_inputEmail.value == "" ||
-        signup_inputPassword == "" || signup_inputConfirmPassword == "" ||
-        signup_inputHourlyRate == "") {
+        signup_inputPassword.value == "" || signup_inputConfirmPassword.value == "" ||
+        signup_inputHourlyRate.value == "") {
 
         setFormMessage(signupForm, "error", "Enter all the data!");
         return false;
@@ -80,6 +80,17 @@ function validateSignupInfo(signupForm) {
 
     if(signup_inputPassword.value != signup_inputConfirmPassword.value) {
         setFormMessage(signupForm, "error", "Passwords doesn't match!");
+        return false;
+    }
+    if(!validateEmail(signup_inputEmail.value)) {
+        setFormMessage(signupForm, "error", "Enter valid email address!");
+        return false;
+    }
+    if(signup_inputHourlyRate.value == "" || signup_inputEmail.value == "" ||
+        signup_inputPassword == "" || signup_inputConfirmPassword == "" ||
+        signup_inputHourlyRate == "") {
+
+        setFormMessage(signupForm, "error", "Enter all the data!");
         return false;
     }
 
