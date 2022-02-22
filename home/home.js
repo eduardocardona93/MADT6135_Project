@@ -261,7 +261,7 @@ function showTasksDialog() {
                     <p><b>Date End: </b> ${new Date(task.endDate)}</p>
                     <p><b>Description: </b></p>
                     <p>${task.description}</p>
-                    <button type="button" id="btnGotoTask" class="btn-action blue" data-project-id="${task.projectId}" title="Go to project Tasks"> ${goToTasksBtn.innerHTML} </button>
+                    <button type="button" id="btnGotoTask" class="btn-action blue btnGotoTask" data-project-id="${task.projectId}" title="Go to project Tasks"> ${goToTasksBtn.innerHTML} </button>
                   </div>`;
   
       return x;

@@ -42,7 +42,7 @@
             itemContent.appendChild(p1);
 
             let memberAsgnd = document.createElement('p');
-            memberAsgnd.innerHTML = "<p><b>Member Asigned:</b>" + task.memberName+ "</p>";
+            memberAsgnd.innerHTML = `<p><b>Member Asigned: </b>${task.memberName[0].toUpperCase() + task.memberName.slice(1)}</p>`;
             itemContent.appendChild(memberAsgnd);
 
             let preRequLine = document.createElement('p');
