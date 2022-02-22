@@ -13,7 +13,9 @@
     const urlSearchParams = new URLSearchParams(window.location.search);
     const projectId = urlSearchParams.get('id');
     const projectObj = getProject(projectId);
-
+    if(projectObj.status === 'completed'){
+      document.getElementById('createNewTask').style.display = 'none'
+    }
     var tasks = getProjectTasks(projectId);    // getAllTasks();
     var projectUsers = getProjectUsers(projectId);
     
@@ -22,7 +24,6 @@
     
         // generate UI for showing all the tasks
         tasks.forEach(task => {
-          console.log(task)
             let taskItem = document.createElement('li');
             taskItem.classList.add('taskItem');
             taskItem.classList.add(task.status);
@@ -42,34 +43,52 @@
             memberAsgnd.innerHTML = "<p><b>Member Asigned:</b>" + task.memberName+ "</p>";
             itemContent.appendChild(memberAsgnd);
 
+            let preRequLine = document.createElement('p');
+            if(task.preReq && task.preReq !== ''){
+              preRequLine.innerHTML = "<p><b>Pre-Requisite Task: </b>"+getTask(parseInt(task.preReq)).title+"</p>";
+            }else{
+              preRequLine.innerHTML = "<p><b>No Pre-Requisite</b></p>";
+            }
+            itemContent.appendChild(preRequLine);
+
             let deadLine = document.createElement('p');
             deadLine.innerHTML = "<p><b>Start date and deadline: </b><br>"+task.startDate + "<b> to </b>" +task.endDate+"</p>";
             itemContent.appendChild(deadLine);
 
             let p3 = document.createElement('p');
             p3.classList = "endBtn"
-            let editTaskBtn = document.createElement('button');
-            editTaskBtn.className = "btn-action editTaskBtn";
-            editTaskBtn.title = "Edit task";
-            editTaskBtn.innerHTML = '<i class="fa fa-pen fa-lg"></i>';
-            editTaskBtn.addEventListener('click', ()=> {showTaskDialog(task);})
 
-            let completeTaskBtn = document.createElement('button');
-            completeTaskBtn.className = "btn-action completeTaskBtn";
-            task.status === 'completed' ? completeTaskBtn.classList.add('completeTaskBtn-hidden') : "" ;
-            completeTaskBtn.title = "Mark Complete";
-            completeTaskBtn.innerHTML = '<i class="fa fa-solid fa-check fa-lg"></i>' // fa-circle-check 
-            completeTaskBtn.addEventListener('click', ()=> {showHoursDialog(task);})
-
-            p3.appendChild(completeTaskBtn);
-            p3.appendChild(editTaskBtn);
+            if(task.status !== 'completed' && parseInt(task.member) === parseInt(getCurrentUser().id)){
+              let editTaskBtn = document.createElement('button');
+              editTaskBtn.className = "btn-action editTaskBtn";
+              editTaskBtn.title = "Edit task";
+              editTaskBtn.innerHTML = '<i class="fa fa-pen fa-lg"></i>';
+              editTaskBtn.addEventListener('click', ()=> {showTaskDialog(task);})
+              console.log(task.preReq ? getTaskCompleted(task.preReq) : '')
+              if(!task.preReq || task.preReq === '' || getTaskCompleted(task.preReq)){
+                let completeTaskBtn = document.createElement('button');
+                completeTaskBtn.className = "btn-action completeTaskBtn";
+                completeTaskBtn.title = "Mark Complete";
+                completeTaskBtn.innerHTML = '<i class="fa fa-solid fa-check fa-lg"></i>' // fa-circle-check 
+                completeTaskBtn.addEventListener('click', ()=> {showHoursDialog(task);})
+                p3.appendChild(completeTaskBtn);
+              }
+              p3.appendChild(editTaskBtn);
+            }else if(task.status !== 'completed'){
+              let pendingLabel = document.createElement('div');
+              pendingLabel.classList.add('endLabel')
+              pendingLabel.innerHTML = '<b>Pending Task <i class="fa-solid fa-clock"></i></b>'
+              p3.appendChild(pendingLabel);
+            }else{
+              let finishedLabel = document.createElement('div');
+              finishedLabel.classList = 'endLabel completedLabel';
+              finishedLabel.innerHTML = `<b>Finished Task in ${task.hours} hours <i class="fa-solid fa-circle-check"></i></b>`
+              p3.appendChild(finishedLabel);
+            }
         
-            itemContent.appendChild(p3);
-          
-    
+            itemContent.appendChild(p3);    
             taskItem.appendChild(title);
             taskItem.appendChild(itemContent);
-    
             taskList.appendChild(taskItem);
      
             
@@ -139,8 +158,10 @@
                     endDate: document.getElementById('tasksEndDate').value  || '',
                     member: document.getElementById('tasksUser').value,
                     memberName: getUser(document.getElementById('tasksUser').value).name,
+                    preReq: document.getElementById('tasksPreReq').value  || '',
                     status: taskDataObject ? taskDataObject.status : 'inProgress',
-                    hours: 0,
+                    hours: taskDataObject ? taskDataObject.hours : 0,
+                    cost: taskDataObject ? taskDataObject.cost : 0,
                   }
                   
                   taskDataObject ? editTask(taskObj) : addTask(taskObj);
@@ -159,11 +180,13 @@
             }
           ];
           
-          var dataUserListObject = '';
+          var dataUserListObject = '', dataTasksList = `<option value=""> --- None ---- </option>`;
           projectUsers.forEach(user => {
               dataUserListObject += ` <option value="${user.id}">${user.name}</option>`;
           });
-
+          getProjectTasks(projectId).forEach(task => {
+            dataTasksList += ` <option value="${task.id}">${task.title}</option>`;
+          });
           const divContainer = document.createElement("div");
           divContainer.innerHTML = `
               <form class ="form" id="formTask">
@@ -174,7 +197,7 @@
                   </div>
                   <div class="form__input-group">
                       <label for="tasksDescription">Task Description</label>
-                      <textarea id="tasksDescription" class="form__input" autofocus rows="4" cols="50"></textarea>  
+                      <textarea id="tasksDescription" class="form__input" autofocus rows="3" cols="50"></textarea>  
                       <div class="form__input-error-message"></div>
                   </div>
                   <div class="form__input-group">
@@ -193,20 +216,24 @@
                       <select class="form__input" id="tasksUser">${dataUserListObject}</select>
                       <div class="form__input-error-message"></div>
                   </div>
+                  <div class="form__input-group">
+                      <label for="tasksPreReq">Task Prerequisite</label>
+                      <select class="form__input" id="tasksPreReq">${dataTasksList}</select>
+                      <div class="form__input-error-message"></div>
+                  </div>
               </form>
             `;
     
           showModal(title, divContainer.innerHTML, buttons);
 
           if(taskDataObject !== null){
-            console.log(taskDataObject);
-
             document.getElementById('tasksTitle').value = taskDataObject.title;
             document.getElementById('tasksDescription').value = taskDataObject.description;
             document.getElementById('tasksStartDate').value =taskDataObject.startDate;
             document.getElementById('tasksEndDate').value = taskDataObject.endDate;
             document.getElementById('tasksUser').value = taskDataObject.member;
             document.getElementById('taskIdHidden').value = taskDataObject.id;
+            document.getElementById('tasksPreReq').value = taskDataObject.preReq || '';
           }
 
         }
@@ -248,7 +275,7 @@
               
               <div class="form__input-group">
                   <label for="hoursWorked">How many hours have you worked on this task?</label>
-                  <input type="number" id="hoursWorked" class="form__input" autofocus >
+                  <input type="number" id="hoursWorked" class="form__input" autofocus min="0" step="0.1">
                   <div class="form__input-error-message"></div>
               </div>
               
@@ -259,7 +286,8 @@
               label: "Mark Complete",
               onClick: (modal) => {
                 if(validateHoursForm()){
-                  task.hours = document.getElementById('hoursWorked').value;
+                  task.hours = parseFloat(document.getElementById('hoursWorked').value);
+                  task.cost = task.hours * getUser(task.member).rate;
                   task.status = 'completed';
                   editTask(task);
                   
@@ -272,8 +300,8 @@
                     // mark the project as complete and calculate the project cost
                     var totalProjectCost = 0;
                     tasks.forEach(task => {
-                      let hours = task.hours == '' ? 0 : task.hours;
-                      let rate = getUser(task.member).rate;
+                      let hours = task.hours == '' ? 0 : parseFloat(task.hours);
+                      let rate = parseFloat(getUser(task.member).rate);
                       totalProjectCost += (hours * rate);
                     })
 

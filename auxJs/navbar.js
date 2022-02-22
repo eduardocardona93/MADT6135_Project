@@ -8,7 +8,7 @@ function insertNavBar(module = 'none'){
     const modules = {
         'projects' :  `<button id="createNewProject" class="menu-actions"  title="Create new project" ><i class="fa fa-folder-plus fa-xl"></i></button>
                        <button id="checkCurrentUsers" class="menu-actions"  title="Check current users" ><i class="fa fa-users fa-xl"></i></button>
-                       <button id="checkCurrentTasks" class="menu-actions"  title="My tasks" ><i class="fa fa-list-check fa-lg"></i></button>`,
+                       <button id="checkCurrentTasks" class="menu-actions"  title="My Pending tasks" ><i class="fa fa-list-check fa-lg"></i></button>`,
         'tasks': `<button id="createNewTask" class="menu-actions"  title="Create new task" ><i class="fa-solid fa-calendar-plus fa-xl"></i></i></button>`,
         'none': '',
     }

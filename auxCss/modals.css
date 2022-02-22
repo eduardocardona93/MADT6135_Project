@@ -109,17 +109,10 @@
 
   
 
-.content.inProgress,.collapsible.inProgress{
+.content,.collapsible{
   border: 1px solid gray;
 }
-.collapsible.inProgress:hover {
+.collapsible:hover {
   background-color: gray;
-  color: white;
-}
-.content.completed,.collapsible.completed{
-  border: 1px solid #00bb64;
-}
-.collapsible.completed:hover {
-  background-color: #00bb64;
   color: white;
 }

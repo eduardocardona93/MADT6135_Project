@@ -240,17 +240,23 @@ function showTasksDialog() {
   const divContainer = document.createElement("div");
   console.log(currentUser)
   const tasksHTML = getAllTasks()
-  .filter(task => { return parseInt(task.member )== currentUser.id; })
+  .filter(task => { return parseInt(task.member )== currentUser.id && task.status === 'inProgress'; })
   .sort ( (a, b) => { return new Date(a.startDate) - new Date(b.startDate); })
-  .reduce((x, a) => {
-    const actions = a.status === 'inProgress' ? `<p class="endBtn"><button id="btnCompleteTask" class="btn-action completeTaskBtn" data-task-id="${a.id}" title="Mark Complete"><i class="fa fa-solid fa-check fa-lg"></i></button></p>` : '';    // fa-circle-check
-    return x += `<button type="button" class="collapsible ${a.status}" data-id="${a.id}"><b>${a.title} (Project: ${a.projectTitle} )</b></button>
+  .reduce((x, task) => {
+    let goToTasksBtn = document.createElement('button');
+    goToTasksBtn.className = "btn-action blue ";
+    goToTasksBtn.title = "Go to project Tasks";
+    goToTasksBtn.innerHTML = '<i class="fa-solid fa-share"></i>';
+    goToTasksBtn.addEventListener('click', () => {
+      location.href = "../tasks/tasks.html?id=" + task.projectId;
+    })
+    return x += `<button type="button" class="collapsible ${task.status}" data-id="${task.id}"><b>${task.title} (Project: ${task.projectTitle} )</b></button>
                 <div class="content">
-                  <p><b>Date End: </b> ${new Date(a.startDate)}</p>
-                  <p><b>Date End: </b> ${new Date(a.endDate)}</p>
+                  <p><b>Date End: </b> ${new Date(task.startDate)}</p>
+                  <p><b>Date End: </b> ${new Date(task.endDate)}</p>
                   <p><b>Description: </b></p>
-                  <p>${a.description}</p>
-                  ${actions}
+                  <p>${task.description}</p>
+                  ${goToTasksBtn.innerHTML}
                 </div>`;
   }, "");
 
@@ -289,12 +295,6 @@ function showTasksDialog() {
     });
   });
 
-  document.getElementById("btnCompleteTask").addEventListener('click', (event) => {
-    var selectedTaskId = event.target.getAttribute('data-task-id');
-    // todo: ask user for hours worked on this task.
-    // todo: check for all task in this project done or not.
-    // todo: if done then calculate the project cost
-  })
 }
 // start execution when Content Loaded
 document.addEventListener("DOMContentLoaded", () => {
@@ -336,14 +336,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let p3 = document.createElement('p');
     p3.classList = "endBtn"
+    if(project.status === "inProgress"){
+      let editProjectBtn = document.createElement('button');
+      editProjectBtn.className = "btn-action editProjectBtn";
+      editProjectBtn.title = "Edit Project";
+      editProjectBtn.innerHTML = '<i class="fa fa-pen fa-lg"></i>';
+      editProjectBtn.addEventListener('click', () => {
+        showProjectDialog(project);
+      })
+      p3.appendChild(editProjectBtn);
 
-    let editProjectBtn = document.createElement('button');
-    editProjectBtn.className = "btn-action editProjectBtn";
-    editProjectBtn.title = "Edit Project";
-    editProjectBtn.innerHTML = '<i class="fa fa-pen fa-lg"></i>';
-    editProjectBtn.addEventListener('click', () => {
-      showProjectDialog(project);
-    })
+    }else{
+      const finishedProjectLabel = document.createElement('div');
+      finishedProjectLabel.classList.add('endLabel');
+      finishedProjectLabel.innerHTML = `<b>Cost: </b> $ ${parseFloat(project.cost).toFixed(2)} `
+      p3.appendChild(finishedProjectLabel);
+    }
     let goToTasksBtn = document.createElement('button');
     goToTasksBtn.className = "btn-action blue goToTasksBtn";
     goToTasksBtn.title = "Project Tasks";
@@ -351,7 +359,7 @@ document.addEventListener("DOMContentLoaded", () => {
     goToTasksBtn.addEventListener('click', () => {
       location.href = "../tasks/tasks.html?id=" + project.id;;
     })
-    p3.appendChild(editProjectBtn);
+    
     p3.appendChild(goToTasksBtn);
 
     itemContent.appendChild(p3);

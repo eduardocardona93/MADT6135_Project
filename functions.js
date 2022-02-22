@@ -270,5 +270,16 @@ var getProjectTasks = (projectId) => {
     return projectTasks;
 }
 
+var getTask = (taskId) => {
+
+    return getAllTasks().find((task) => parseInt(taskId) ==  parseInt(task.id));
+
+}
+
+var getTaskCompleted =  (taskId) => {
+
+    return getTask(taskId).status.toLowerCase() === 'completed';
+}
+
 //#endregion
 

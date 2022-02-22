@@ -34,7 +34,7 @@
   list-style: none;
   display: inline-block;
   width: 28%;
-
+  align-self: start;
   text-align: justify;
   margin: 8px 2%;
   padding: 5px;
@@ -84,4 +84,9 @@
 .btn-action.blue{
   color: #2696ff;
   
+}
+
+.endLabel{
+  margin: 0 10px;
+  padding: 20px ;
 }
