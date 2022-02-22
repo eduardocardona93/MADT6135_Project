@@ -166,7 +166,7 @@ function showProjectDialog(projectDataObject = null) {
           </div>
           <div class="form__input-group">
               <label for="projectMembers">Project Members</label>
-              <div id="container" style="width:50%; font: 500 1rem 'Quicksand', sans-serif;">
+              <div id="container" style="width:100%; font: 500 1rem 'Quicksand', sans-serif;">
                 <br>
                 <!--element which is going to render the MultiSelect-->
                 <input type="text" tabindex="1" id="select">

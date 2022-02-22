@@ -13,6 +13,7 @@
     const urlSearchParams = new URLSearchParams(window.location.search);
     const projectId = urlSearchParams.get('id');
     const projectObj = getProject(projectId);
+    document.getElementById('projectNameTasksLabel').innerText = `Project: ${projectObj.title}`;
     if(projectObj.status === 'completed'){
       document.getElementById('createNewTask').style.display = 'none'
     }
