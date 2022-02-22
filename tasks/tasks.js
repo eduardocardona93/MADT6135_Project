@@ -316,14 +316,17 @@
                   if(remainingTasks.length == 0) {
                     // mark the project as complete and calculate the project cost
                     var totalProjectCost = 0;
+                    var totalProjectHours = 0;
                     tasks.forEach(task => {
                       let hours = task.hours == '' ? 0 : parseFloat(task.hours);
                       let rate = parseFloat(getUser(task.member).rate);
                       totalProjectCost += (hours * rate);
+                      totalProjectHours += hours;
                     })
 
                     var updatedProject = getProject(projectId);
                     updatedProject.cost = totalProjectCost;
+                    updatedProject.hours = totalProjectHours;
                     updatedProject.status = 'completed';
 
                     editProject(updatedProject);

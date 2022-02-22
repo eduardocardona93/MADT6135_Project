@@ -129,7 +129,8 @@ function showProjectDialog(projectDataObject = null) {
             leaderId: currentUser.id,
             members: memberSelection.value,
             status: "inProgress",
-            cost: 0
+            cost: 0,
+            hours: 0,
           }
           if (document.getElementById('projectIdHidden').value) {
             projectObj.id = document.getElementById('projectIdHidden').value;
@@ -353,6 +354,12 @@ document.addEventListener("DOMContentLoaded", () => {
     let p2 = document.createElement('p');
     p2.innerHTML = "<b>Team members: </b><span>" + project.members.length + "</span>";
     itemContent.appendChild(p2);
+    
+    if(project.status === 'completed') {
+      let p4 = document.createElement('p');
+      p4.innerHTML = `<b>Total Hours: </b><span>${project.hours}</span>`;
+      itemContent.appendChild(p4);
+    }
 
     let p3 = document.createElement('p');
     p3.classList = "endBtn"
