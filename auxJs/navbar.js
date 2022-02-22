@@ -25,7 +25,8 @@ function insertNavBar(module = 'none'){
         </div>
         
         <div class="actions">
-            <button class="btn-action" id="profileBtn" title="My Profile"><i class="fa fa-user fa-lg"></i></button>
+            <p class='user-name'> <span class="user-name">${currentUser.name[0].toUpperCase() + currentUser.name.slice(1)}</span></p>
+            <button class="btn-action" id="profileBtn" title="My Profile"><i class="fa fa-user fa-lg user-icon"></i></button>
             <button class="btn-action" id="logOutBtn" title="Log out"><i class="fa-solid fa-right-from-bracket fa-lg"></i></button>
         </div>
     `
