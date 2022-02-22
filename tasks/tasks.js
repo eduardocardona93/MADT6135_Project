@@ -14,7 +14,7 @@
     const projectId = urlSearchParams.get('id');
     const projectObj = getProject(projectId);
 
-    let tasks = getProjectTasks(projectId);    // getAllTasks();
+    var tasks = getProjectTasks(projectId);    // getAllTasks();
     var projectUsers = getProjectUsers(projectId);
     
     
@@ -227,6 +227,18 @@
           return validForm;
         }
 
+        // returns all remaining tasks
+        function getRemainingTasks() {
+          return tasks.filter((task, index, remainingTasks) => {
+            if(task.status == 'inProgress') {
+              remainingTasks.push(task);
+              return remainingTasks;
+            }
+          });
+
+          // return remainingTasks.length > 0 ? false : true;
+        }
+
         function showHoursDialog(task) {
           const title = "Mark as Complete";
 
@@ -235,7 +247,7 @@
           <form class ="form" id="markDoneForm">
               
               <div class="form__input-group">
-                  <label for="hoursWorked">Howmany hours have you worked on this task?</label>
+                  <label for="hoursWorked">How many hours have you worked on this task?</label>
                   <input type="number" id="hoursWorked" class="form__input" autofocus >
                   <div class="form__input-error-message"></div>
               </div>
@@ -253,6 +265,26 @@
                   
                   document.body.removeChild(modal); // CLOSE WINDOWS
                   document.getElementsByClassName('completeTaskBtn')[0].classList.add('completeTaskBtn-hidden');
+
+                  // check whether all task of the current project is completed or not
+                  var remainingTasks = getRemainingTasks();
+                  if(remainingTasks.length == 0) {
+                    // mark the project as complete and calculate the project cost
+                    var totalProjectCost = 0;
+                    tasks.forEach(task => {
+                      let hours = task.hours == '' ? 0 : task.hours;
+                      let rate = getUser(task.member).rate;
+                      totalProjectCost += (hours * rate);
+                    })
+
+                    var updatedProject = getProject(projectId);
+                    updatedProject.cost = totalProjectCost;
+                    updatedProject.status = 'completed';
+
+                    editProject(updatedProject);
+                  }
+
+                  // reload the page for updated content
                   location.reload();
                 }
               },
