@@ -284,12 +284,14 @@ function showTasksDialog() {
 
   showModal(title, divContainer.innerHTML, buttons);
 
-  // document.getElementById('btnGotoTask').addEventListener('click', (event) => {
-  //   console.log("go to task clicked");
-    
-  //   console.log(event.target.dataset.projectId);
-  //   location.href = "../tasks/tasks.html?id=" + event.target.dataset.projectId;
-  // });
+  document.querySelectorAll(".btnGotoTask").forEach(btn => {
+    btn.addEventListener('click', (event) => {
+      console.log("go to task clicked");
+      
+      console.log(event.target.dataset.projectId);
+      location.href = "../tasks/tasks.html?id=" + event.target.dataset.projectId;
+    });
+  })
 
   const allCollapsibles = document.querySelectorAll(".collapsible")
   allCollapsibles.forEach(element => {
