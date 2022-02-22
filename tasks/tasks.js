@@ -128,12 +128,21 @@
             clearInputError(tasksStartDate);
             setInputSuccess(tasksStartDate);
           }
+          
           if(tasksEndDate.value == ''){
             setInputError(tasksEndDate,"Please enter an end date");
             validForm = false;
           }else{
             clearInputError(tasksEndDate);
             setInputSuccess(tasksEndDate);
+          }
+
+          if(tasksStartDate.value !== '' && tasksEndDate.value !== '' && new Date(tasksStartDate.value) > new Date(tasksEndDate.value)){
+            setInputError(tasksStartDate,"Please enter a start date before the end date");
+            validForm = false;
+          }else{
+            clearInputError(tasksStartDate);
+            setInputSuccess(tasksStartDate);
           }
           if(tasksUser.value == ''){
             setInputError(tasksUser,"Please enter an user");
@@ -192,6 +201,7 @@
           getProjectTasks(projectId).forEach(task => {
             dataTasksList += ` <option value="${task.id}">${task.title}</option>`;
           });
+          let today = new Date().toISOString().split('T')[0]
           const divContainer = document.createElement("div");
           divContainer.innerHTML = `
               <form class ="form" id="formTask">
@@ -207,12 +217,12 @@
                   </div>
                   <div class="form__input-group">
                       <label for="tasksStartDate">Task Start Date</label>
-                       <input type="date" id="tasksStartDate" class="form__input" autofocus >
+                       <input type="date" id="tasksStartDate" value="${today}" min="${today}" class="form__input" autofocus >
                       <div class="form__input-error-message"></div>
                   </div>
                   <div class="form__input-group">
                       <label for="tasksEndDate">Task End Date</label>
-                       <input type="date" id="tasksEndDate" class="form__input" autofocus >
+                       <input type="date" id="tasksEndDate" min="${today}" class="form__input" autofocus >
                       <div class="form__input-error-message"></div>
                   </div>
                   <input type="hidden" id="taskIdHidden">
@@ -294,8 +304,8 @@
                   task.hours = parseFloat(document.getElementById('hoursWorked').value);
                   task.cost = task.hours * getUser(task.member).rate;
                   task.status = 'completed';
-                  let yourDate = new Date()
-                  task.completionDate = yourDate.toISOString().split('T')[0];
+                  let today = new Date()
+                  task.completionDate = today.toISOString().split('T')[0];
                   editTask(task);
                   
                   document.body.removeChild(modal); // CLOSE WINDOWS
