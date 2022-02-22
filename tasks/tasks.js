@@ -13,9 +13,10 @@
     const urlSearchParams = new URLSearchParams(window.location.search);
     const projectId = urlSearchParams.get('id');
     const projectObj = getProject(projectId);
-    document.getElementById('projectNameTasksLabel').innerText = `Project: ${projectObj.title}`;
+    document.getElementById('projectNameTasksLabel').innerText = `Project: ${projectObj.title}` ;
     if(projectObj.status === 'completed'){
       document.getElementById('createNewTask').style.display = 'none'
+      document.getElementById('projectNameTasksLabel').innerHTML += ` <i class="fa fa-solid fa-check-circle completedLabel"></i>`
     }
     var tasks = getProjectTasks(projectId);    // getAllTasks();
     var projectUsers = getProjectUsers(projectId);
@@ -53,7 +54,9 @@
             itemContent.appendChild(preRequLine);
 
             let deadLine = document.createElement('p');
-            deadLine.innerHTML = "<p><b>Start date and deadline: </b><br>"+task.startDate + "<b> to </b>" +task.endDate+"</p>";
+            deadLine.innerHTML = task.status !== 'completed' ? 
+            "<p><b> Start date and deadline: </b><br>"+task.startDate + "<b> to </b>" +task.endDate+"</p>" : 
+            "<p><b> Start date and completion date: </b><br>"+task.startDate + "<b> to </b>" +task.completionDate+"</p>";
             itemContent.appendChild(deadLine);
 
             let p3 = document.createElement('p');
@@ -163,6 +166,7 @@
                     status: taskDataObject ? taskDataObject.status : 'inProgress',
                     hours: taskDataObject ? taskDataObject.hours : 0,
                     cost: taskDataObject ? taskDataObject.cost : 0,
+                    completionDate:''
                   }
                   
                   taskDataObject ? editTask(taskObj) : addTask(taskObj);
@@ -290,6 +294,8 @@
                   task.hours = parseFloat(document.getElementById('hoursWorked').value);
                   task.cost = task.hours * getUser(task.member).rate;
                   task.status = 'completed';
+                  let yourDate = new Date()
+                  task.completionDate = yourDate.toISOString().split('T')[0];
                   editTask(task);
                   
                   document.body.removeChild(modal); // CLOSE WINDOWS
