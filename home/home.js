@@ -339,7 +339,7 @@ document.addEventListener("DOMContentLoaded", () => {
     itemContent.classList.add('itemContent');
 
     let p1 = document.createElement('p');
-    p1.innerHTML = "<b>Manager: </b><span>" + project.leaderName + "</span>"
+    p1.innerHTML = `<b>Manager: </b><span>${project.leaderName[0].toUpperCase() + project.leaderName.slice(1)}</span>`
     itemContent.appendChild(p1);
 
     let p2 = document.createElement('p');
