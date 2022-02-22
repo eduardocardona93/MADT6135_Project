@@ -243,7 +243,7 @@ function showTasksDialog() {
   .filter(task => { return parseInt(task.member )== currentUser.id; })
   .sort ( (a, b) => { return new Date(a.startDate) - new Date(b.startDate); })
   .reduce((x, a) => {
-    const actions = a.status === 'inProgress' ? `<p class="endBtn"><button class="btn-action completeTaskBtn" data-task-id="${a.id}" title="Complete"><i class="fa fa-solid fa-circle-check fa-lg"></i></button></p>` : '';
+    const actions = a.status === 'inProgress' ? `<p class="endBtn"><button id="btnCompleteTask" class="btn-action completeTaskBtn" data-task-id="${a.id}" title="Mark Complete"><i class="fa fa-solid fa-check fa-lg"></i></button></p>` : '';    // fa-circle-check
     return x += `<button type="button" class="collapsible ${a.status}" data-id="${a.id}"><b>${a.title} (Project: ${a.projectTitle} )</b></button>
                 <div class="content">
                   <p><b>Date End: </b> ${new Date(a.startDate)}</p>
@@ -254,16 +254,17 @@ function showTasksDialog() {
                 </div>`;
   }, "");
 
-  
   divContainer.innerHTML = `
     <div class="form">${tasksHTML}</div>
   `;
+
   const buttons = [{ // CLOSE WINDOWS
     label: "Close",
     type: 'close',
     onClick: (modal) => {},
     triggerClose: true
   }];
+
   showModal(title, divContainer.innerHTML, buttons);
 
   const allCollapsibles = document.querySelectorAll(".collapsible")
@@ -285,9 +286,15 @@ function showTasksDialog() {
 
       });
 
-      
     });
   });
+
+  document.getElementById("btnCompleteTask").addEventListener('click', (event) => {
+    var selectedTaskId = event.target.getAttribute('data-task-id');
+    // todo: ask user for hours worked on this task.
+    // todo: check for all task in this project done or not.
+    // todo: if done then calculate the project cost
+  })
 }
 // start execution when Content Loaded
 document.addEventListener("DOMContentLoaded", () => {
